@@ -1,0 +1,32 @@
+{{ block "board-form" . }}
+<form hx-post="/claim" hx-target="#board" hx-swap="outerHTML">
+  {{ template "board" . }}
+  <div>
+    <input hx-preserve readonly name="start_pos" id="start_pos" type="text" />
+    <input hx-preserve readonly name="end_pos" id="end_pos" type="text" />
+    <button id="claim-button" type="submit">claim</button>
+    <button id="claim-button" type="button" hx-post="/clear" hx-swap="outerHTML">clear</button>
+  </div>
+</form>
+{{ end }}
+
+{{ block "board" . }}
+<div id="board" class="board"
+  style="display: flex; flex-direction: column; gap: 5px; font-family: monospace; font-size: 10px;">
+  {{ range .Tiles }}
+  <div class="tile-row" style="display:flex; flex-direction: row; gap: 5px;">
+    {{ range .}}
+    <div style="height:50px;width:50px;" name="{{.X}},{{.Y}}" class="tile">
+      {{ .Letter }}
+    </div>
+    {{end}}
+  </div>
+  {{ end }}
+  {{ range .Bulletins }}
+  <div class="bulletin"
+    style="position: absolute; top: {{ .Top }}px; left: {{.Left}}px; width: {{ .Width }}px; height: {{ .Height }}px; background-color: blue;">
+    {{ .Content }}
+  </div>
+  {{ end }}
+</div>
+{{ end }}

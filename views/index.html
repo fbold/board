@@ -13,18 +13,7 @@
 </head>
 
 <body>
-  <div id="board" class="board" style="display: flex; flex-direction: column; gap: 5px;">
-    {{ range .Tiles }}
-    <div class="tile-row" style="display:flex; flex-direction: row; gap: 5px;">
-      {{ range .}}
-      <div style="height:50px;width:50px;" class="tile">{{ .Letter }}</div>
-      {{end}}
-    </div>
-    {{ end }}
-  </div>
-  <div>
-    <button id="claim-button" hx-post="/claim">claim</button>
-  </div>
+  {{ template "board-form" .}}
   <script src="/static/js/main.js"></script>
 </body>
 

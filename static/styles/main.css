@@ -1,5 +1,5 @@
 .board {
-  pointer-events: none;
+  position: relative;
 }
 
 .tile-row {
