@@ -1,0 +1,16 @@
+.board {
+  pointer-events: none;
+}
+
+.tile-row {
+  pointer-events: none;
+}
+
+.tile {
+  background-color: red;
+  pointer-events: none;
+}
+
+.green {
+  background-color: green;
+}
