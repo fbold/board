@@ -44,16 +44,19 @@ type Bulletin struct {
 	Content string
 }
 
+const TPS = 100 // tiles per side
+const TD = 10   // tiles dimensions
+
 type Board struct {
-	Tiles     [10][10]Tile
+	Tiles     [TPS][TPS]Tile
 	Bulletins []Bulletin
 }
 
 func newBoard() Board {
-	var board [10][10]Tile
+	var board [TPS][TPS]Tile
 
-	for i := 0; i < 10; i++ {
-		for j := 0; j < 10; j++ {
+	for i := 0; i < TPS; i++ {
+		for j := 0; j < TPS; j++ {
 			board[i][j] = Tile{X: j, Y: i, Letter: strconv.Itoa(i*10 + j)}
 		}
 	}
@@ -100,10 +103,10 @@ func main() {
 			Y_:      startY,
 			X:       endX,
 			Y:       endY,
-			Top:     float64(startY) * 55,
-			Left:    float64(startX) * 55,
-			Width:   float64(endX-startX+1) * 52.5,
-			Height:  float64(endY-startY+1) * 52.5,
+			Top:     float64(startY) * TD,
+			Left:    float64(startX) * TD,
+			Width:   float64(endX-startX+1) * TD,
+			Height:  float64(endY-startY+1) * TD,
 			Content: "",
 		}
 

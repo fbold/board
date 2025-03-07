@@ -98,14 +98,30 @@ function hoverHighlight(startPos_, currentPos) {
   }
 
   console.log(tilesInSection.length)
+  const [x_, y_] = tilesInSection[0].getAttribute("name").split(",")
+  const [x, y] = tilesInSection[tilesInSection.length - 1].getAttribute("name").split(",")
 
-  tilesInSection.forEach(tile => {
-    tile.classList.add("green")
-  })
+  setStartInput(x_, y_)
+  setEndInput(x, y)
+  showBulletinOutline([x_, y_], [x, y])
 
-  tilesNotInSection.forEach(tile => {
-    tile.classList.remove("green")
-  })
+  //tilesInSection.forEach(tile => {
+  //tile.classList.add("highlight-preview")
+  //})
+  //
+  //tilesNotInSection.forEach(tile => {
+  //tile.classList.remove("highlight-preview")
+  //})
+}
+
+const bulletinOutline = document.getElementById("bulletin-outline")
+function showBulletinOutline(start, end) {
+  console.log("setting bulletin content input position")
+  bulletinOutline.style.left = start[0] * 10 - 1 + "px"
+  bulletinOutline.style.top = start[1] * 10 - 1 + "px"
+  bulletinOutline.style.width = (end[0] - start[0] + 1) * 10 + "px"
+  bulletinOutline.style.height = (end[1] - start[1] + 1) * 10 + "px"
+  bulletinOutline.hidden = false
 }
 
 function highlightTiles(startPos, endPos) {
@@ -125,13 +141,66 @@ function highlightTiles(startPos, endPos) {
 
   console.log(tilesInSection.length)
 
+  // TODO do this programatically with math finding nearest rounded value
+  // instead of with divs?
   const [x_, y_] = tilesInSection[0].getAttribute("name").split(",")
   const [x, y] = tilesInSection[tilesInSection.length - 1].getAttribute("name").split(",")
 
   setStartInput(x_, y_)
   setEndInput(x, y)
 
-  tilesInSection.forEach(tile => {
-    tile.classList.add("green")
-  })
+  //tilesInSection.forEach(tile => {
+  //tile.classList.add("highlight-preview")
+  //})
+
+  // need to now show input for the contents of the bulletin
+  // perhaps render an input that looks like a temp version of the bulleting
+  // fomatted such that the characters you type in are placed as they would be
+  // once claimed.....
+  showBulletinContentInput([x_, y_], [x, y])
 }
+
+const contentPreview = document.getElementById("content-preview")
+function showBulletinContentInput(start, end) {
+  console.log("setting bulletin content input position")
+  contentPreview.style.left = start[0] * 10 - 1 + "px"
+  contentPreview.style.top = start[1] * 10 - 1 + "px"
+  contentPreview.style.width = (end[0] - start[0] + 1) * 10 + "px"
+  contentPreview.style.height = (end[1] - start[1] + 1) * 10 + "px"
+  contentPreview.hidden = false
+}
+
+
+const contentInput = document.getElementById("content-input")
+contentInput.addEventListener("input", (e) => {
+  contentPreview.innerHTML = e.target.value
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
