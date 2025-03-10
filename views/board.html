@@ -1,6 +1,5 @@
 {{ block "board-form" . }}
 <form hx-post="/claim" hx-target="#board" hx-swap="outerHTML">
-  {{ template "board" . }}
   <div>
     <input hx-preserve readonly name="start_pos" id="start_pos" type="text" />
     <input hx-preserve readonly name="end_pos" id="end_pos" type="text" />
@@ -12,22 +11,26 @@
 {{ end }}
 
 {{ block "board" . }}
-<div id="board" class="board" style="display: flex; flex-direction: column; font-family: monospace; font-size: 10px;">
-  {{ range .Tiles }}
-  <div class="tile-row" style="display:flex; flex-direction: row;">
-    {{ range .}}
-    <div style="height:10px;width:10px;flex-shrink: 0;" name="{{.X}},{{.Y}}" class="tile">
+<div id="board-wall" data-xpos="" data-ypos="">
+  <div id="board-frame">
+    <div id="board" class="board" style="">
+      {{ range .Tiles }}
+      <div class="tile-row" style="display:flex; flex-direction: row;">
+        {{ range .}}
+        <div style="height:10px;width:10px;flex-shrink: 0;" name="{{.X}},{{.Y}}" class="tile">
+        </div>
+        {{end}}
+      </div>
+      {{ end }}
+      {{ range .Bulletins }}
+      <div class="bulletin"
+        style="position: absolute; top: {{ .Top }}px; left: {{.Left}}px; width: {{ .Width }}px; height: {{ .Height }}px; background-color: blue;">
+        {{ .Content }}
+      </div>
+      {{ end }}
+      <div id="bulletin-outline"></div>
+      <div id="content-preview" class=""></div>
     </div>
-    {{end}}
   </div>
-  {{ end }}
-  {{ range .Bulletins }}
-  <div class="bulletin"
-    style="position: absolute; top: {{ .Top }}px; left: {{.Left}}px; width: {{ .Width }}px; height: {{ .Height }}px; background-color: blue;">
-    {{ .Content }}
-  </div>
-  {{ end }}
-  <div id="bulletin-outline"></div>
-  <div id="content-preview" class=""></div>
 </div>
 {{ end }}

@@ -1,3 +1,5 @@
+import "./navigation.js"
+
 document.body.addEventListener('htmx:configRequest', function(evt) {
   console.log(evt.detail.elt.id)
   if (evt.detail.elt.id === "claim-button") {
@@ -6,7 +8,6 @@ document.body.addEventListener('htmx:configRequest', function(evt) {
   }
 })
 
-const board = document.getElementById("board")
 const tiles = document.getElementsByClassName("tile")
 
 const startInput = document.getElementById("start_pos")
@@ -25,6 +26,8 @@ document.addEventListener('htmx:afterSwap', function(evt) {
   startInput.setAttribute("value", "")
   endInput.setAttribute("value", "")
 })
+
+
 
 
 let startPos = [0, 0]

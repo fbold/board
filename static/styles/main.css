@@ -1,8 +1,38 @@
-.board {
-  position: relative;
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+#board-wall {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  overflow: hidden;
+}
+
+#board-frame {
+  transform-origin: center;
+}
+
+#board {
+  position: absolute;
   background-color: #F5E6E8;
   border: 4px solid #E1C6B7;
   width: min-content;
+  display: flex;
+  flex-direction: column;
+  font-family: monospace;
+  font-size: 10px;
+  transform-origin: center;
 }
 
 #bulletin-outline {
