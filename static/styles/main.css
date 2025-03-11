@@ -24,31 +24,22 @@ body {
   z-index: 10;
 }
 
-#claim-form {}
 
 #board-wall {
   width: 100vw;
-  height: 100vh;
-  position: absolute;
+  height: calc(100vh - 50px);
+  top: 50px;
+  position: relative;
   overflow: hidden;
 }
 
 #board-frame {
-  transform-origin: center;
+  position: relative;
+  transform-origin: top left;
+  background-color: gray;
+  width: calc(3840px + 100px);
+  height: calc(2160px + 100px);
 }
-
-/*
- #board-background {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
-  width: 200vw;
-  height: 200vh;
-  background-size: 40px 40px;
-  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0.2) 1px);
-}
-*/
 
 #board {
   position: absolute;
@@ -56,6 +47,10 @@ body {
   flex-direction: column;
   font-family: monospace;
   font-size: 10px;
+  top: 50px;
+  left: 50px;
+  width: 3840px;
+  height: 2160px;
   transform-origin: top left;
   background-size: 40px 40px;
   background-image: radial-gradient(circle, #000000 1px, white 1px);

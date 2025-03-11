@@ -23,10 +23,10 @@ const boardFrame = document.getElementById("board-frame")
 const board = document.getElementById("board")
 
 // center board initially
-let translateX = window.innerWidth / 2 - board.clientWidth / 2;
-let translateY = window.innerHeight / 2 - board.clientHeight / 2;
+let translateX = boardWall.clientWidth / 2 - board.clientWidth / 2;
+let translateY = boardWall.clientHeight / 2 - board.clientHeight / 2;
 
-board.style.transform = `translate(${translateX}px, ${translateY}px)`
+boardFrame.style.transform = `translate(${translateX}px, ${translateY}px)`
 let startX, startY;
 let isDragging = false;
 
@@ -46,11 +46,11 @@ setScaleRange()
 zoomOnPoint(0)
 
 function setScaleRange() {
-  const limitingDimension = window.innerWidth > window.innerHeight ? "height" : "width"
+  const limitingDimension = boardWall.clientWidth > boardWall.clientHeight ? "height" : "width"
   if (limitingDimension === "height")
-    scaleMin = window.innerWidth / board.offsetWidth
+    scaleMin = boardWall.clientWidth / boardFrame.offsetWidth
   else
-    scaleMin = window.innerHeight / board.offsetHeight
+    scaleMin = boardWall.clientHeight / boardFrame.offsetHeight
   scaleMax = 3
   console.log("Scale Range:", scaleMin, scaleMax)
 }
@@ -69,6 +69,9 @@ function zoomOnPoint(scaleFactor) {
   const newScale = Math.max(scaleMin, Math.min(3, scale * scaleFactor));
   if (newScale !== scale) {
     scale = newScale
+    // make sure translates adjust accordingly so we aren't showing out of bounds when just zooming
+    setTranslateX(translateX, scale)
+    setTranslateY(translateY, scale)
     updateTransform()
   }
 }
@@ -81,16 +84,25 @@ function zoomOnPoint(scaleFactor) {
 
 
 
-function setTranslateX(value) {
-  const scaledX = board.getBoundingClientRect().width
-  const newTranslateX = Math.min(Math.max(value, window.innerWidth - scaledX), 0)
-  console.log("X Set Translate X:", window.innerWidth, scaledX, newTranslateX)
+function setTranslateX(value, overrideScale) {
+  let scaledX = 0
+  if (overrideScale)
+    scaledX = boardFrame.offsetWidth * overrideScale
+  else
+    scaledX = boardFrame.getBoundingClientRect().width
+
+  const newTranslateX = Math.min(Math.max(value, boardWall.clientWidth - scaledX), 0)
+  console.log("X Set Translate X:", boardWall.clientWidth, scaledX, newTranslateX)
   translateX = newTranslateX
 }
-function setTranslateY(value) {
-  const scaledY = board.getBoundingClientRect().height
-  const newTranslateY = Math.min(Math.max(value, window.innerHeight - scaledY), 0)
-  console.log("Y Set Translate Y:", window.innerHeight, scaledY, newTranslateY)
+function setTranslateY(value, overrideScale) {
+  let scaledY = 0
+  if (overrideScale)
+    scaledY = boardFrame.offsetHeight * overrideScale
+  else
+    scaledY = boardFrame.getBoundingClientRect().height
+  const newTranslateY = Math.min(Math.max(value, boardWall.clientHeight - scaledY), 0)
+  console.log("Y Set Translate Y:", boardWall.clientHeight, scaledY, newTranslateY)
   translateY = newTranslateY
 }
 
@@ -175,5 +187,6 @@ function getDistance(touch1, touch2) {
 
 function updateTransform() {
   //  boardFrame.style.transform = `translate(${translateX}px, ${translateY}px)`;
-  board.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  //  board.style.transform = `scale(${scale})`;
+  boardFrame.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
