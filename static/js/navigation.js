@@ -64,14 +64,20 @@ boardWall.addEventListener("wheel", (event) => {
   zoomOnPoint(event.deltaY < 0 ? 1.1 : 0.9, event.clientX, event.clientY);
 });
 
-function zoomOnPoint(scaleFactor) {
+function zoomOnPoint(scaleFactor, x, y) {
   // only allow between 0.5x and 3x zoom
   const newScale = Math.max(scaleMin, Math.min(3, scale * scaleFactor));
   if (newScale !== scale) {
+    const xToCompensate = boardFrame.offsetWidth * newScale - boardFrame.offsetWidth * scale
+    const yToCompensate = boardFrame.offsetHeight * newScale - boardFrame.offsetHeight * scale
     scale = newScale
+    // zoom in to the point where mouse is
+
+
+
     // make sure translates adjust accordingly so we aren't showing out of bounds when just zooming
-    setTranslateX(translateX, scale)
-    setTranslateY(translateY, scale)
+    setTranslateX(translateX - xToCompensate / 2, newScale)
+    setTranslateY(translateY - yToCompensate / 2, newScale)
     updateTransform()
   }
 }
@@ -82,8 +88,6 @@ function zoomOnPoint(scaleFactor) {
   * =======================
 */
 
-
-
 function setTranslateX(value, overrideScale) {
   let scaledX = 0
   if (overrideScale)
@@ -91,6 +95,9 @@ function setTranslateX(value, overrideScale) {
   else
     scaledX = boardFrame.getBoundingClientRect().width
 
+  // this clamps translate x such that the board frame never move so far as to expose background
+  // this allows board frame to give some margin between board and window edge while maintaining control
+  // to adjust this edge just adjust width and height of #board-frame
   const newTranslateX = Math.min(Math.max(value, boardWall.clientWidth - scaledX), 0)
   console.log("X Set Translate X:", boardWall.clientWidth, scaledX, newTranslateX)
   translateX = newTranslateX
@@ -101,6 +108,7 @@ function setTranslateY(value, overrideScale) {
     scaledY = boardFrame.offsetHeight * overrideScale
   else
     scaledY = boardFrame.getBoundingClientRect().height
+
   const newTranslateY = Math.min(Math.max(value, boardWall.clientHeight - scaledY), 0)
   console.log("Y Set Translate Y:", boardWall.clientHeight, scaledY, newTranslateY)
   translateY = newTranslateY
