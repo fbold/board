@@ -22,6 +22,17 @@ const boardWall = document.getElementById("board-wall")
 const boardFrame = document.getElementById("board-frame")
 const board = document.getElementById("board")
 
+// center board initially
+let translateX = window.innerWidth / 2 - board.clientWidth / 2;
+let translateY = window.innerHeight / 2 - board.clientHeight / 2;
+
+board.style.transform = `translate(${translateX}px, ${translateY}px)`
+let startX, startY;
+let isDragging = false;
+
+let pinchStartDistance = 0;
+let pinchStartScale = 1;
+
 /* 
   * ===================
   * ZOOMING and SCALING
@@ -59,7 +70,6 @@ function zoomOnPoint(scaleFactor) {
   if (newScale !== scale) {
     scale = newScale
     updateTransform()
-
   }
 }
 
@@ -69,16 +79,6 @@ function zoomOnPoint(scaleFactor) {
   * =======================
 */
 
-// center board initially
-let translateX = window.innerWidth / 2 - board.clientWidth / 2;
-let translateY = window.innerHeight / 2 - board.clientHeight / 2;
-
-board.style.transform = `translate(${translateX}px, ${translateY}px)`
-let startX, startY;
-let isDragging = false;
-
-let pinchStartDistance = 0;
-let pinchStartScale = 1;
 
 
 function setTranslateX(value) {
