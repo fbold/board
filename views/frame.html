@@ -1,0 +1,40 @@
+{{ block "frame" . }}
+<div id="frame">
+  <script>
+    function frameSwitchMode() {
+      window.claimMode = !window.claimMode
+      const form = document.getElementById("claim-form")
+      const board = document.getElementById("board")
+      if (window.claimMode) {
+        form.style.display = "block"
+        board.style.cursor = "crosshair";
+      } else {
+        form.style.display = "none"
+        board.style.cursor = "grabbing";
+      }
+    }
+  </script>
+  <form id="claim-form" hx-post="/claim" hx-target="#board" hx-swap="outerHTML">
+    <input hx-preserve readonly name="start_pos" id="start_pos" type="text" />
+    <input hx-preserve readonly name="end_pos" id="end_pos" type="text" />
+    <button id="claim-button" type="submit">claim</button>
+    <button id="claim-button" type="button" hx-post="/clear" hx-swap="outerHTML">clear</button>
+    <textarea id="content-input"></textarea>
+  </form>
+  <button type="button" onclick="frameSwitchMode()">Claim</button>
+</div>
+{{ end }}
+
+{{ block "claim-mode" . }}
+<form hx-post="/claim" hx-target="#board" hx-swap="outerHTML">
+  <input hx-preserve readonly name="start_pos" id="start_pos" type="text" />
+  <input hx-preserve readonly name="end_pos" id="end_pos" type="text" />
+  <button id="claim-button" type="submit">claim</button>
+  <button id="claim-button" type="button" hx-post="/clear" hx-swap="outerHTML">clear</button>
+  <textarea id="content-input"></textarea>
+</form>
+{{ end }}
+
+{{ block "view-mode" . }}
+<button type="button" hx-get="/claim-mode" hx-target="#frame">Claim some tiles</button>
+{{ end }}

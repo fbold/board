@@ -1,19 +1,8 @@
-{{ block "board-form" . }}
-<form hx-post="/claim" hx-target="#board" hx-swap="outerHTML">
-  <div>
-    <input hx-preserve readonly name="start_pos" id="start_pos" type="text" />
-    <input hx-preserve readonly name="end_pos" id="end_pos" type="text" />
-    <button id="claim-button" type="submit">claim</button>
-    <button id="claim-button" type="button" hx-post="/clear" hx-swap="outerHTML">clear</button>
-    <textarea id="content-input"></textarea>
-  </div>
-</form>
-{{ end }}
-
 {{ block "board" . }}
 <div id="board-wall" data-xpos="" data-ypos="">
   <div id="board-frame">
     <div id="board" class="board" style="">
+      <div id="board-background"></div>
       {{ range .Tiles }}
       <div class="tile-row" style="display:flex; flex-direction: row;">
         {{ range .}}

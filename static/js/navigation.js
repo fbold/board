@@ -12,7 +12,7 @@
     this is the fixed scale fram within which the actual board is origin center
     this is what the translateX and Y are relative to
   - board
-    this the actual board, the scale get applied to this, also oritin center
+    this the actual board, the scale get applied to this, also origin center
 
 
   apologies for long comment, cruising at Bachman's peak and paranoid I will forget what I did
@@ -22,28 +22,40 @@ const boardWall = document.getElementById("board-wall")
 const boardFrame = document.getElementById("board-frame")
 const board = document.getElementById("board")
 
-
-// center board initially
-let translateX = window.innerWidth / 2 - board.clientWidth / 2;
-let translateY = window.innerHeight / 2 - board.clientHeight / 2;
-board.style.transform = `translate(${translateX}px, ${translateY}px)`
+/* 
+  * ===================
+  * ZOOMING and SCALING
+  * ===================
+*/
 
 let scale = 1;
-let startX, startY;
-let isDragging = false;
+let scaleMin
+let scaleMax
+setScaleRange()
+zoomOnPoint(0)
 
-let pinchStartDistance = 0;
-let pinchStartScale = 1;
+function setScaleRange() {
+  const limitingDimension = window.innerWidth > window.innerHeight ? "height" : "width"
+  if (limitingDimension === "height")
+    scaleMin = window.innerWidth / board.offsetWidth
+  else
+    scaleMin = window.innerHeight / board.offsetHeight
+  scaleMax = 3
+  console.log("Scale Range:", scaleMin, scaleMax)
+}
+
+window.addEventListener("resize", setScaleRange)
 
 // mouse scroll zooming
 boardWall.addEventListener("wheel", (event) => {
+  if (window.claimMode) return
   event.preventDefault();
   zoomOnPoint(event.deltaY < 0 ? 1.1 : 0.9, event.clientX, event.clientY);
 });
 
 function zoomOnPoint(scaleFactor) {
   // only allow between 0.5x and 3x zoom
-  const newScale = Math.max(0.5, Math.min(3, scale * scaleFactor));
+  const newScale = Math.max(scaleMin, Math.min(3, scale * scaleFactor));
   if (newScale !== scale) {
     scale = newScale
     updateTransform()
@@ -51,8 +63,41 @@ function zoomOnPoint(scaleFactor) {
   }
 }
 
+/* 
+  * =======================
+  * PANNING AND TRANSLATING
+  * =======================
+*/
+
+// center board initially
+let translateX = window.innerWidth / 2 - board.clientWidth / 2;
+let translateY = window.innerHeight / 2 - board.clientHeight / 2;
+
+board.style.transform = `translate(${translateX}px, ${translateY}px)`
+let startX, startY;
+let isDragging = false;
+
+let pinchStartDistance = 0;
+let pinchStartScale = 1;
+
+
+function setTranslateX(value) {
+  const scaledX = board.getBoundingClientRect().width
+  const newTranslateX = Math.min(Math.max(value, window.innerWidth - scaledX), 0)
+  console.log("X Set Translate X:", window.innerWidth, scaledX, newTranslateX)
+  translateX = newTranslateX
+}
+function setTranslateY(value) {
+  const scaledY = board.getBoundingClientRect().height
+  const newTranslateY = Math.min(Math.max(value, window.innerHeight - scaledY), 0)
+  console.log("Y Set Translate Y:", window.innerHeight, scaledY, newTranslateY)
+  translateY = newTranslateY
+}
+
+
 // mouse panning
 boardWall.addEventListener("mousedown", (event) => {
+  if (window.claimMode) return
   isDragging = true;
   startX = event.clientX - translateX;
   startY = event.clientY - translateY;
@@ -62,20 +107,30 @@ boardWall.addEventListener("mousedown", (event) => {
 // moving and mouse up are done on whole document
 // so move can be cancelled even if mouse leave board
 document.addEventListener("mousemove", (event) => {
+  if (window.claimMode) return
   if (!isDragging) return;
-  translateX = (event.clientX - startX) * 1;
-  translateY = (event.clientY - startY) * 1;
+  //translateX = (event.clientX - startX) * 1;
+  setTranslateX((event.clientX - startX) * 1)
+  setTranslateY((event.clientY - startY) * 1)
   updateTransform();
 });
 
 document.addEventListener("mouseup", () => {
+  if (window.claimMode) return
   isDragging = false;
   boardWall.style.cursor = "grab";
 });
 
 
+/* 
+  * ===================
+  * TOUCH CONTROLS OUTDATED OUTDATED OUTDATED TODO TODO
+  * TODO TODO TODO
+  * ===================
+*/
 // touch pan and pinch zoom
 boardWall.addEventListener("touchstart", (event) => {
+  if (window.claimMode) return
   if (event.touches.length === 1) {
     // Single touch for panning
     isDragging = true;
@@ -90,6 +145,7 @@ boardWall.addEventListener("touchstart", (event) => {
 });
 
 boardWall.addEventListener("touchmove", (event) => {
+  if (window.claimMode) return
   if (event.touches.length === 1 && isDragging) {
     // Single finger drag for panning
     translateX = event.touches[0].clientX - startX;
@@ -106,6 +162,7 @@ boardWall.addEventListener("touchmove", (event) => {
 });
 
 boardWall.addEventListener("touchend", () => {
+  if (window.claimMode) return
   isDragging = false;
 });
 
@@ -117,6 +174,6 @@ function getDistance(touch1, touch2) {
 }
 
 function updateTransform() {
-  boardFrame.style.transform = `translate(${translateX}px, ${translateY}px)`;
-  board.style.transform = `scale(${scale})`;
+  //  boardFrame.style.transform = `translate(${translateX}px, ${translateY}px)`;
+  board.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }

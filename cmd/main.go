@@ -77,6 +77,10 @@ func main() {
 		return c.Render(200, "index", board)
 	})
 
+	e.GET("/claim-mode", func(c echo.Context) error {
+		return c.Render(200, "claim-mode", board)
+	})
+
 	e.POST("/clear", func(c echo.Context) error {
 
 		board.Bulletins = []Bulletin{}
