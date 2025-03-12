@@ -44,6 +44,9 @@ let lastMouseY
   * ===================
 */
 
+// this is defined in css of the .board-frame
+// needs to be halfed and set here for screen to board calcs
+const FRAME_MARGIN = 100
 let scale = 1;
 let scaleMin
 let scaleMax
@@ -86,8 +89,8 @@ function screenToBoardSpace(x, y) {
   // don't worry, the scale stored does equal observed scale
   //  const empiricScale = boardRect?.width / boardFrame?.offsetWidth
   //  console.log("Screen to board space call", scale, empiricScale)
-  let xFrame = (x - boardRect.left) / scale - 50
-  let yFrame = (y - boardRect.top) / scale - 50
+  let xFrame = (x - boardRect.left) / scale - FRAME_MARGIN
+  let yFrame = (y - boardRect.top) / scale - FRAME_MARGIN
   return [xFrame, yFrame]
 }
 

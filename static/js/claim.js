@@ -21,6 +21,7 @@ document.addEventListener('htmx:afterSwap', function(evt) {
   // hx-preserve is so these js references to them aren't lost
   startInput.setAttribute("value", "")
   endInput.setAttribute("value", "")
+  selecting = false
 })
 
 
@@ -30,18 +31,57 @@ let selecting = false
 
 const board = document.getElementById("board")
 
-board.addEventListener("mousedown", (e) => {
-  if (!window.claimMode) return
-  console.log("down")
-  //startPos = [(e.x + 50) / scale, (e.y + 50) / scale]
+const floatingMenu = document.getElementById("floating-menu")
+const floatingMenuClaimButtom = document.getElementById("floating-menu-claim-button")
+
+const floatingMenuShown = false
+
+function hideFloatingMenu() {
+  floatingMenu.hidden = true
+  floatingMenu.classList.add("disappear")
+}
+function showFloatingMenu([x, y]) {
+  floatingMenu.style.left = x + "px"
+  floatingMenu.style.top = y + "px"
+  floatingMenu.hidden = false
+  floatingMenu.classList.add("appear")
+  floatingMenuShown = true
+}
+board.addEventListener("dblclick", (e) => {
   const [x, y] = screenToBoardSpace(e.x, e.y)
   startPos = [Math.round(x), Math.round(y)]
+  showFloatingMenu(startPos)
   setStartInput(startPos)
+})
+
+floatingMenuClaimButtom.onclick = () => {
   selecting = true
+  hideFloatingMenu()
+}
+
+
+//board.addEventListener("mousedown", (e) => {
+//  if (!window.claimMode) return
+//  console.log("down")
+//  //startPos = [(e.x + 50) / scale, (e.y + 50) / scale]
+//  const [x, y] = screenToBoardSpace(e.x, e.y)
+//  startPos = [Math.round(x), Math.round(y)]
+//  setStartInput(startPos)
+//  selecting = true
+//})
+board.addEventListener("click", (e) => {
+  if (!selecting) return
+  if (e.target.id !== "board") return
+  console.log("end click")
+  const [x, y] = screenToBoardSpace(e.x, e.y)
+  endPos = [Math.round(x), Math.round(y)]
+  // find tiles in selection
+  selecting = false
+  highlightTiles(startPos, endPos)
 })
 
 window.addEventListener("mousemove", (e) => {
-  if (!window.claimMode) return
+  //if (!window.claimMode) return
   if (e.target.id !== "board") return
   if (!selecting) return
   console.log("over")
@@ -50,16 +90,16 @@ window.addEventListener("mousemove", (e) => {
   showBulletinOutline(startPos, endPos)
 })
 
-window.addEventListener("mouseup", (e) => {
-  if (!window.claimMode) return
-  if (e.target.id !== "board") return
-  console.log("up")
-  const [x, y] = screenToBoardSpace(e.x, e.y)
-  endPos = [Math.round(x), Math.round(y)]
-  // find tiles in selection
-  selecting = false
-  highlightTiles(startPos, endPos)
-})
+//window.addEventListener("mouseup", (e) => {
+//  if (!window.claimMode) return
+//  if (e.target.id !== "board") return
+//  console.log("up")
+//  const [x, y] = screenToBoardSpace(e.x, e.y)
+//  endPos = [Math.round(x), Math.round(y)]
+//  // find tiles in selection
+//  selecting = false
+//  highlightTiles(startPos, endPos)
+//})
 
 const bulletinOutline = document.getElementById("bulletin-outline")
 function showBulletinOutline([x_, y_], [x, y]) {

@@ -1,4 +1,16 @@
+/* @@@@@@@@@@@@@@@@
+ * FONTS
+ * */
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("/static/fonts/IBM_Plex_Mono/IBMPlexMono-SemiBold.ttf") format("truetype");
+  font-display: swap;
+}
+
+
+
 body {
+  font-family: "IBMPlexMono", monospace;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -10,6 +22,7 @@ body {
 *::before,
 *::after {
   box-sizing: inherit;
+  font-family: "IBMPlexMono", monospace;
 }
 
 :root {
@@ -17,20 +30,24 @@ body {
   --sec-bg: #E1C6B7;
 }
 
+
+
 #frame {
-  height: 50px;
   width: 100%;
-  background-color: var(--pri-bg);
+  padding: 4px;
   position: fixed;
+  bottom: 0;
   z-index: 10;
+  display: flex;
+  justify-content: left;
+  align-items: center;
 }
 
 
 #board-wall {
   width: 100vw;
   /*height: 100vh;*/
-  height: calc(100vh - 50px);
-  top: 50px;
+  height: 100vh;
   position: relative;
   overflow: hidden;
 }
@@ -38,25 +55,114 @@ body {
 #board-frame {
   position: relative;
   transform-origin: top left;
-  background-color: gray;
-  width: calc(3840px + 100px);
-  height: calc(2160px + 100px);
+  background-color: transparent;
+  width: calc(3840px + 200px);
+  height: calc(2160px + 200px);
 }
 
 #board {
   position: absolute;
   display: flex;
   flex-direction: column;
-  font-family: monospace;
   font-size: 10px;
-  top: 50px;
-  left: 50px;
+  top: 100px;
+  left: 100px;
   width: 3840px;
   height: 2160px;
   transform-origin: top left;
   background-size: 40px 40px;
-  background-image: radial-gradient(circle, #000000 2px, white 1px);
+  background-image: radial-gradient(circle, var(--sec-bg) 2px, white 3px);
 }
+
+
+/* @@@@@@@@@@@@@@@@
+ * FLOATING MENU
+ * */
+#floating-menu {
+  width: 0;
+  height: 0;
+  overflow-y: visible;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+}
+
+#floating-menu-ring {
+  width: 15px;
+  height: 15px;
+  transform: translate(-50%, -50%);
+  border: 3px solid var(--sec-bg);
+  border-radius: 50%;
+  position: absolute;
+  transition: scale 100ms ease-out;
+  transform-origin: center;
+  scale: 0;
+}
+
+#floating-menu-ring .appear {
+  scale: 1;
+}
+
+#floating-menu.appear>#floating-menu-ring {
+  scale: 1;
+}
+
+#floating-menu-claim-button {
+  height: 1rem;
+  font-size: 2rem;
+  width: min-content;
+  text-wrap: nowrap;
+  left: -50%;
+  background-color: transparent;
+  border: none;
+  color: var(--sec-bg);
+  transition: opacity 200ms ease-in-out;
+  opacity: 0;
+  animation: 5s button-floating 0s linear infinite;
+}
+
+#floating-menu.appear button {
+  opacity: 1;
+}
+
+@keyframes button-floating {
+  0% {
+    transform: translateX(0px) translateY(0px);
+  }
+
+  12% {
+    transform: translateX(2px) translateY(1px);
+  }
+
+  25% {
+    transform: translateX(3px) translateY(2px);
+  }
+
+  37% {
+    transform: translateX(2px) translateY(3px);
+  }
+
+  50% {
+    transform: translateX(0px) translateY(2px);
+  }
+
+  62% {
+    transform: translateX(-2px) translateY(3px);
+  }
+
+  75% {
+    transform: translateX(-3px) translateY(2px);
+  }
+
+  87% {
+    transform: translateX(-2px) translateY(1px);
+  }
+
+  100% {
+    transform: translateX(0px) translateY(0px);
+  }
+}
+
 
 /* the selection for claiming */
 
