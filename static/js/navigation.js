@@ -1,16 +1,14 @@
 //@ts-check
 /*
   this handles the zooming and panning on mobile and desktop
-  start with gpt promp that was okay, but sorted it out
-  with this (genius) workaround that requires no extra js
-  keep the board centered on the page on scrolling
-  while also keeping centerd while zooming
+  start with gpt promp of which there is nothing left except the touch controls
+  because I haven't got round to redoing them yet.
 
   - boardWall
     is just the wall where the baord is, occupies whole screen and overflow hidden
   - boardFrame
-    this is the fixed scale fram within which the actual board is origin center
-    this is what the translateX and Y are relative to
+    This is what holds the board, it has some extra height and width so the board itself
+    can be put 
   - board
     this the actual board, the scale get applied to this, also origin center
 
@@ -94,20 +92,17 @@ function debugMarker(x, y, color) {
 function calculateScaleChangeCompensationVector(x, y, currentScale, newScale) {
   // first find current point in frame space, relative to origin at top-left corner
   const boardRect = boardFrame?.getBoundingClientRect()
-  console.log(boardRect.left, boardRect.top)
-  console.log(translateX, translateY)
-  console.log("=---------------=")
-  let xFrame = x / currentScale - boardRect.left / currentScale
-  let yFrame = y / currentScale - boardRect.top / currentScale
+  let xFrame = (x - boardRect.left) / currentScale
+  let yFrame = (y - boardRect.top) / currentScale
   // calculate where it will be with new scale
-  const deltaScale = 1 + newScale - currentScale
-  console.log(newScale, currentScale)
+  // essentially v_1 = v_0 + v_0*deltaScale
+  // then v_1 - v_0, and this is the compensation
   const newX = xFrame + xFrame * (newScale - currentScale)
   const xComp = newX - xFrame
   const newY = yFrame + yFrame * (newScale - currentScale)
   const yComp = newY - yFrame
-  debugMarker(xFrame, yFrame)
-  debugMarker(newX, newY, "red")
+  //  debugMarker(xFrame, yFrame)
+  //  debugMarker(newX, newY, "red")
 
   return [-xComp, -yComp]
 }
@@ -124,62 +119,8 @@ function zoomOnPoint(scaleFactor, x, y) {
     updateTransform()
     return
   }
-  // This is C = (0,0) where C is the center of the board
-  // this was only needed if zoomin only happening on center
-  // not needed for zooming on mouse, as it happens
-  //    const xScaleDrift = boardFrame.offsetWidth * newScale - boardFrame.offsetWidth * scale
-  //    const yScaleDrift = boardFrame.offsetHeight * newScale - boardFrame.offsetHeight * scale
-  //console.log("MOUSE POS", x, y, lastMouseX, lastMouseY)
-  // account for possibility mouse has changed position
-  //  let mouseMoveXCompensation = 0
-  //  let mouseMoveYCompensation = 0
-  //  if (scale !== 1 && lastMouseX && (lastMouseX !== x || lastMouseY !== y)) {
-  //    console.log("mouse moved since last zoom, compensating")
-  //    // convert x and y of mouse to boardFrame space
-  //    let xInFrame = lastMouseX / window.innerWidth * boardFrame.clientWidth
-  //    let yInFrame = lastMouseY / window.innerHeight * boardFrame.clientHeight
-  //
-  //    // calculates the drift due to (top-left-origin) scaling
-  //    let xMouseScaleDrift = xInFrame * scale - xInFrame
-  //    let yMouseScaleDrift = yInFrame * scale - yInFrame
-  //    mouseMoveXCompensation = xMouseScaleDrift
-  //    mouseMoveYCompensation = yMouseScaleDrift
-  //  }
-  //  lastMouseX = x
-  //  lastMouseY = y
-  //
-
-
-  // convert x and y of mouse to boardFrame space
-  //  let lastXInFrame = (lastMouseX || x) / window.innerWidth * boardFrame.clientWidth
-  //  let lastYInFrame = (lastMouseY || y) / window.innerHeight * boardFrame.clientHeight
-
-  let xInFrame = (x / window.innerWidth) * boardFrame.clientWidth - translateX
-  let yInFrame = (y / window.innerHeight) * boardFrame.clientHeight// - translateY
 
   const [xComp, yComp] = calculateScaleChangeCompensationVector(x, y, scale, newScale)
-
-  console.log("XCOMP:", xComp, "YCOMP", yComp)
-  // calculates the drift due to (top-left-origin) scaling
-  let xMouseScaleDrift = xInFrame * newScale - xInFrame * scale
-  let yMouseScaleDrift = yInFrame * newScale - yInFrame * scale
-
-  //  let mouseMoveXCompensation = 0
-  //  let mouseMoveYCompensation = 0
-  //  if (lastMouseX && lastMouseX !== x) {
-  //    mouseMoveXCompensation = xInFrame * newScale - lastXInFrame * scale
-  //    mouseMoveYCompensation = yInFrame * newScale - lastYInFrame * scale
-  //  }
-
-  //  lastMouseX = x
-  //  lastMouseY = y
-
-
-  // so it can be applied as negative to whole board to counteract it
-  const xToCompensate = -xMouseScaleDrift// + mouseMoveXCompensation
-  const yToCompensate = -yMouseScaleDrift// + mouseMoveYCompensation
-  //    const xToCompensate = - xScaleDrift / 2 - xMouseScaleDrift / 2
-  //    const yToCompensate = - yScaleDrift / 2 - yMouseScaleDrift / 2
 
   scale = newScale
 
@@ -197,6 +138,9 @@ function zoomOnPoint(scaleFactor, x, y) {
   * =======================
 */
 
+// this clamps translate x such that the board frame never move so far as to expose background
+// this allows board frame to give some margin between board and window edge while maintaining control
+// to adjust this edge just adjust width and height of #board-frame
 function setTranslateX(value, overrideScale) {
   let scaledX = 0
   if (overrideScale)
@@ -204,9 +148,6 @@ function setTranslateX(value, overrideScale) {
   else
     scaledX = boardFrame.getBoundingClientRect().width
 
-  // this clamps translate x such that the board frame never move so far as to expose background
-  // this allows board frame to give some margin between board and window edge while maintaining control
-  // to adjust this edge just adjust width and height of #board-frame
   const newTranslateX = Math.min(Math.max(value, boardWall.clientWidth - scaledX), 0)
   if (Math.round(value) != Math.round(newTranslateX)) console.log("CLAMPED")
   //console.log("X Set Translate X:", boardWall.clientWidth, scaledX, newTranslateX)

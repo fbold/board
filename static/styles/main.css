@@ -54,7 +54,7 @@ body {
   height: 2160px;
   transform-origin: top left;
   background-size: 40px 40px;
-  background-image: radial-gradient(circle, #000000 1px, white 1px);
+  background-image: radial-gradient(circle, #000000 2px, white 1px);
 }
 
 /* the selection for claiming */
