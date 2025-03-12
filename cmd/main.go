@@ -107,10 +107,10 @@ func main() {
 			Y_:      startY,
 			X:       endX,
 			Y:       endY,
-			Top:     float64(startY) * TD,
-			Left:    float64(startX) * TD,
-			Width:   float64(endX-startX+1) * TD,
-			Height:  float64(endY-startY+1) * TD,
+			Top:     float64(startY),
+			Left:    float64(startX),
+			Width:   float64(endX - startX),
+			Height:  float64(endY - startY),
 			Content: "",
 		}
 

@@ -6,8 +6,6 @@
 
 import { screenToBoardSpace } from "/static/js/navigation.js"
 
-const tiles = document.getElementsByClassName("tile")
-
 const startInput = document.getElementById("start_pos")
 const endInput = document.getElementById("end_pos")
 
