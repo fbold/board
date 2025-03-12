@@ -1,5 +1,5 @@
 {{ block "frame" . }}
-<div id="frame">
+<div id="frame" hx-target="#board">
   <script>
     function frameSwitchMode() {
       window.claimMode = !window.claimMode
@@ -14,7 +14,7 @@
       }
     }
   </script>
-  <form id="claim-form" hx-post="/claim" hx-target="#board" hx-swap="outerHTML">
+  <form id="claim-form" hx-post="/claim" hx-target="#board" hx-swap="afterbegin">
     <input hx-preserve readonly name="start_pos" id="start_pos" type="text" />
     <input hx-preserve readonly name="end_pos" id="end_pos" type="text" />
     <button id="claim-button" type="submit">claim</button>
@@ -26,7 +26,7 @@
 {{ end }}
 
 {{ block "claim-mode" . }}
-<form hx-post="/claim" hx-target="#board" hx-swap="outerHTML">
+<form hx-post="/claim" hx-target="board" hx-swap="afterbegin">
   <input hx-preserve readonly name="start_pos" id="start_pos" type="text" />
   <input hx-preserve readonly name="end_pos" id="end_pos" type="text" />
   <button id="claim-button" type="submit">claim</button>

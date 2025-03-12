@@ -2,15 +2,23 @@
 <div id="board-wall" data-xpos="" data-ypos="">
   <div id="board-frame">
     <div id="board" class="board" style="">
-      {{ range .Bulletins }}
-      <div class="bulletin"
-        style="position: absolute; top: {{ .Top }}px; left: {{.Left}}px; width: {{ .Width }}px; height: {{ .Height }}px; background-color: blue;">
-        {{ .Content }}
-      </div>
-      {{ end }}
+      {{ template "bulletins" .Bulletins }}
       <div id="bulletin-outline"></div>
       <div id="content-preview" class=""></div>
     </div>
   </div>
+</div>
+{{ end }}
+
+{{ block "bulletins" . }}
+{{ range . }}
+{{ template "bulletin" .}}
+{{ end }}
+{{ end }}
+
+{{ block "bulletin" . }}
+<div class="bulletin"
+  style="position: absolute; top: {{ .Top }}px; left: {{.Left}}px; width: {{ .Width }}px; height: {{ .Height }}px;">
+  {{ .Content }}
 </div>
 {{ end }}

@@ -116,7 +116,7 @@ func main() {
 
 		board.Bulletins = append(board.Bulletins, newBulletin)
 
-		return c.Render(200, "board", board)
+		return c.Render(200, "bulletin", newBulletin)
 	})
 
 	e.Logger.Fatal(e.Start(":3000"))

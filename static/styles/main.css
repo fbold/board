@@ -14,6 +14,7 @@ body {
 
 :root {
   --pri-bg: #F5E6E8;
+  --sec-bg: #E1C6B7;
 }
 
 #frame {
@@ -69,7 +70,8 @@ body {
 #content-preview {
   position: absolute;
   background-color: #E1C6B7;
-  border: 2px dashed pink;
+  opacity: 0.7;
+  border: 2px dashed var(--sec-bg);
   text-align: start;
   display: flex;
   flex-direction: row;
@@ -78,8 +80,9 @@ body {
   padding: 4px;
 }
 
-#claimed-bulletin {
+.bulletin {
   position: absolute;
+  background-color: var(--sec-bg);
 }
 
 /* the actual board tiles n shit */
