@@ -81,14 +81,16 @@ function debugMarker(x, y, color) {
   boardFrame?.appendChild(marker)
 }
 
-/*
-  * Calculate
-  * @param {number} x - The x pos of fixed point in screen space
-  * @param {number} y - The y pos " " "
-  * @param {number} currentScale - bruh
-  * @param {number} newScale - "
-  * @returns {number} Returns the vector that should be applied to parent for fixed point to remain assuming top-left origin
-  */
+function screenToBoardSpace(x, y) {
+  const boardRect = boardFrame?.getBoundingClientRect()
+  // don't worry, the scale stored does equal observed scale
+  //  const empiricScale = boardRect?.width / boardFrame?.offsetWidth
+  //  console.log("Screen to board space call", scale, empiricScale)
+  let xFrame = (x - boardRect.left) / scale - 50
+  let yFrame = (y - boardRect.top) / scale - 50
+  return [xFrame, yFrame]
+}
+
 function calculateScaleChangeCompensationVector(x, y, currentScale, newScale) {
   // first find current point in frame space, relative to origin at top-left corner
   const boardRect = boardFrame?.getBoundingClientRect()
@@ -246,3 +248,5 @@ function updateTransform() {
   //  board.style.transform = `scale(${scale})`;
   boardFrame.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
+
+export { screenToBoardSpace }
