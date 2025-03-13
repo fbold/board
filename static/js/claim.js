@@ -56,19 +56,10 @@ board.addEventListener("dblclick", (e) => {
 
 floatingMenuClaimButtom.onclick = () => {
   selecting = true
+  board.style.cursor = "crosshair"
   hideFloatingMenu()
 }
 
-
-//board.addEventListener("mousedown", (e) => {
-//  if (!window.claimMode) return
-//  console.log("down")
-//  //startPos = [(e.x + 50) / scale, (e.y + 50) / scale]
-//  const [x, y] = screenToBoardSpace(e.x, e.y)
-//  startPos = [Math.round(x), Math.round(y)]
-//  setStartInput(startPos)
-//  selecting = true
-//})
 board.addEventListener("click", (e) => {
   if (!selecting) return
   if (e.target.id !== "board") return
@@ -77,6 +68,7 @@ board.addEventListener("click", (e) => {
   endPos = [Math.round(x), Math.round(y)]
   // find tiles in selection
   selecting = false
+  board.style.cursor = "grab"
   highlightTiles(startPos, endPos)
 })
 
@@ -90,16 +82,6 @@ window.addEventListener("mousemove", (e) => {
   showBulletinOutline(startPos, endPos)
 })
 
-//window.addEventListener("mouseup", (e) => {
-//  if (!window.claimMode) return
-//  if (e.target.id !== "board") return
-//  console.log("up")
-//  const [x, y] = screenToBoardSpace(e.x, e.y)
-//  endPos = [Math.round(x), Math.round(y)]
-//  // find tiles in selection
-//  selecting = false
-//  highlightTiles(startPos, endPos)
-//})
 
 const bulletinOutline = document.getElementById("bulletin-outline")
 function showBulletinOutline([x_, y_], [x, y]) {

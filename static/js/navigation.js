@@ -179,7 +179,7 @@ boardWall.addEventListener("mousedown", (event) => {
   isDragging = true;
   startX = event.clientX - translateX;
   startY = event.clientY - translateY;
-  boardWall.style.cursor = "grabbing";
+  board.style.cursor = "grabbing";
 });
 
 // moving and mouse up are done on whole document
@@ -196,7 +196,7 @@ document.addEventListener("mousemove", (event) => {
 document.addEventListener("mouseup", () => {
   if (window.claimMode) return
   isDragging = false;
-  boardWall.style.cursor = "grab";
+  board.style.cursor = "grab";
 });
 
 

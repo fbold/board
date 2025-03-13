@@ -8,7 +8,9 @@
 }
 
 
-
+/* @@@@@@@@@@@@@@@@
+ * BASE
+ * */
 body {
   font-family: "IBMPlexMono", monospace;
   margin: 0;
@@ -32,6 +34,9 @@ body {
 
 
 
+/* @@@@@@@@@@@@@@@@
+ * FIXED UI
+ * */
 #frame {
   width: 100%;
   padding: 4px;
@@ -44,24 +49,15 @@ body {
 }
 
 
+
+/* @@@@@@@@@@@@@@@@
+ * THE BOARD
+ * */
 #board-wall {
   width: 100vw;
   height: 100vh;
   position: relative;
   overflow: hidden;
-}
-
-#board-hook {
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transform-origin: top left;
-
-  /*top: calc((100vh - 3840px + 200px)/2);
-  left: calc((100vw - 2160px + 200px)/2);*/
-  width: calc(min(100vw, 100vh));
-  height: calc(min(100vw, 100vh));
 }
 
 #board-frame {
@@ -73,6 +69,7 @@ body {
 }
 
 #board {
+  cursor: grab;
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -175,9 +172,9 @@ body {
   }
 }
 
-
-/* the selection for claiming */
-
+/* @@@@@@@@@@@@@@@@
+ * CLAIMING
+ * */
 #bulletin-outline {
   background-color: transparent;
   pointer-events: none;
@@ -201,24 +198,4 @@ body {
 .bulletin {
   position: absolute;
   background-color: var(--sec-bg);
-}
-
-/* the actual board tiles n shit */
-
-.tile-row {
-  pointer-events: none;
-  flex-grow: 0;
-  width: min-content;
-}
-
-.tile {
-  pointer-events: none;
-}
-
-.tile .grid {
-  border: 1px dashed grey;
-}
-
-.highlight-preview {
-  background-color: #E1C6B7;
 }

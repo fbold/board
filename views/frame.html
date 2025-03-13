@@ -1,19 +1,5 @@
 {{ block "frame" . }}
 <div id="frame" hx-target="#board">
-  <script>
-    function frameSwitchMode() {
-      window.claimMode = !window.claimMode
-      const form = document.getElementById("claim-form")
-      const board = document.getElementById("board")
-      if (window.claimMode) {
-        form.style.display = "block"
-        board.style.cursor = "crosshair";
-      } else {
-        form.style.display = "none"
-        board.style.cursor = "grabbing";
-      }
-    }
-  </script>
   <form id="claim-form" hx-post="/claim" hx-target="#board" hx-swap="afterbegin">
     <input hx-preserve readonly name="start_pos" id="start_pos" type="text" />
     <input hx-preserve readonly name="end_pos" id="end_pos" type="text" />
