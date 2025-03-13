@@ -193,6 +193,15 @@ body {
   flex-wrap: wrap;
   align-content: start;
   padding: 4px;
+  z-index: 10;
+}
+
+#bulletin-claim-form {
+  position: relative;
+  scale: inherit;
+  transition: transform 200ms ease-out;
+  z-index: -10;
+
 }
 
 .bulletin {

@@ -34,7 +34,6 @@ const board = document.getElementById("board")
 const floatingMenu = document.getElementById("floating-menu")
 const floatingMenuClaimButtom = document.getElementById("floating-menu-claim-button")
 
-const floatingMenuShown = false
 
 function hideFloatingMenu() {
   floatingMenu.hidden = true
@@ -45,7 +44,6 @@ function showFloatingMenu([x, y]) {
   floatingMenu.style.top = y + "px"
   floatingMenu.hidden = false
   floatingMenu.classList.add("appear")
-  floatingMenuShown = true
 }
 board.addEventListener("dblclick", (e) => {
   const [x, y] = screenToBoardSpace(e.x, e.y)
@@ -60,18 +58,6 @@ floatingMenuClaimButtom.onclick = () => {
   hideFloatingMenu()
 }
 
-board.addEventListener("click", (e) => {
-  if (!selecting) return
-  if (e.target.id !== "board") return
-  console.log("end click")
-  const [x, y] = screenToBoardSpace(e.x, e.y)
-  endPos = [Math.round(x), Math.round(y)]
-  // find tiles in selection
-  selecting = false
-  board.style.cursor = "grab"
-  highlightTiles(startPos, endPos)
-})
-
 window.addEventListener("mousemove", (e) => {
   //if (!window.claimMode) return
   if (e.target.id !== "board") return
@@ -82,6 +68,18 @@ window.addEventListener("mousemove", (e) => {
   showBulletinOutline(startPos, endPos)
 })
 
+board.addEventListener("click", (e) => {
+  if (!selecting) return
+  if (e.target.id !== "board") return
+  console.log("end click")
+  const [x, y] = screenToBoardSpace(e.x, e.y)
+  endPos = [Math.round(x), Math.round(y)]
+  // find tiles in selection
+  selecting = false
+  board.style.cursor = "grab"
+  highlightSelectedArea(startPos, endPos)
+  showClaimForm()
+})
 
 const bulletinOutline = document.getElementById("bulletin-outline")
 function showBulletinOutline([x_, y_], [x, y]) {
@@ -94,7 +92,7 @@ function showBulletinOutline([x_, y_], [x, y]) {
   bulletinOutline.hidden = false
 }
 
-function highlightTiles(startPos, endPos) {
+function highlightSelectedArea(startPos, endPos) {
   setStartInput(startPos)
   setEndInput(endPos)
   // need to now show input for the contents of the bulletin
@@ -121,7 +119,17 @@ contentInput.addEventListener("input", (e) => {
 })
 
 
+// @@@@@@@@@
+// CLAIM FORM
+//
+const claimForm = document.getElementById("bulletin-claim-form")
+function showClaimForm() {
+  // should determine shich side of the bulletin it should go...
+  // but for now just show to the left
+  console.log("claim form", claimForm)
+  claimForm.style.transform = "translateX(-100%)"
 
+}
 
 
 
