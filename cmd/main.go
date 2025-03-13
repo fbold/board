@@ -102,6 +102,13 @@ func main() {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid numbers"})
 		}
 
+		if startX > endX {
+			startX, endX = endX, startX
+		}
+		if startY > endY {
+			startY, endY = endY, startY
+		}
+
 		newBulletin := Bulletin{
 			X_:      startX,
 			Y_:      startY,

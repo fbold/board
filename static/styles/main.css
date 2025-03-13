@@ -46,10 +46,22 @@ body {
 
 #board-wall {
   width: 100vw;
-  /*height: 100vh;*/
   height: 100vh;
   position: relative;
   overflow: hidden;
+}
+
+#board-hook {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: top left;
+
+  /*top: calc((100vh - 3840px + 200px)/2);
+  left: calc((100vw - 2160px + 200px)/2);*/
+  width: calc(min(100vw, 100vh));
+  height: calc(min(100vw, 100vh));
 }
 
 #board-frame {

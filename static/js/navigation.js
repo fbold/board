@@ -33,11 +33,6 @@ let isDragging = false;
 let pinchStartDistance = 0;
 let pinchStartScale = 1;
 
-// for when we need to know if mouse has
-// move since last we used
-let lastMouseX
-let lastMouseY
-
 /* 
   * ===================
   * ZOOMING and SCALING
@@ -51,19 +46,26 @@ let scale = 1;
 let scaleMin
 let scaleMax
 setScaleRange()
-zoomOnPoint(0, -1, -1)
+zoomOnPoint(-10, -1, -1)
+
 
 function setScaleRange() {
-  const limitingDimension = boardWall.clientWidth > boardWall.clientHeight ? "height" : "width"
-  if (limitingDimension === "height")
-    scaleMin = boardWall.clientWidth / boardFrame.offsetWidth
-  else
-    scaleMin = boardWall.clientHeight / boardFrame.offsetHeight
+  const widthRatio = window.innerWidth / boardFrame.offsetWidth
+  const heightRatio = window.innerHeight / boardFrame.offsetHeight
+
+  if (widthRatio < heightRatio)
+    scaleMin = widthRatio
+  else scaleMin = heightRatio
   scaleMax = 3
-  //console.log("Scale Range:", scaleMin, scaleMax)
+  // centers the board so spacing for dimension where board doesn't reach window edge is even
+  boardFrame.style.left = (window.innerWidth - boardFrame?.offsetWidth * scaleMin) / 2 + "px"
+  boardFrame.style.top = (window.innerHeight - boardFrame?.offsetHeight * scaleMin) / 2 + "px"
 }
 
-window.addEventListener("resize", setScaleRange)
+window.addEventListener("resize", () => {
+  setScaleRange()
+  zoomOnPoint(-10, -1, -1)
+})
 
 // mouse scroll zooming
 boardWall.addEventListener("wheel", (event) => {
@@ -114,7 +116,7 @@ function calculateScaleChangeCompensationVector(x, y, currentScale, newScale) {
 
 function zoomOnPoint(scaleFactor, x, y) {
   // only allow between 0.5x and 3x zoom
-  const newScale = Math.max(scaleMin, Math.min(3, scale + 0.1 * scaleFactor));
+  const newScale = Math.max(scaleMin, Math.min(scaleMax, scale + 0.1 * scaleFactor));
   if (newScale === scale) return
   if (x == -1 && y == -1) {
     // if initializing zoom
