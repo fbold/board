@@ -12,9 +12,9 @@
   <link rel="stylesheet" type="text/css" href="/static/styles/main.css">
 </head>
 
-<body>
-  {{ template "frame" .}}
-  {{ template "board" . }}
+<body id="body-root">
+  {{ template "claim" . }}
+
   <script type="module" src="/static/js/main.js"></script>
 </body>
 
@@ -22,3 +22,7 @@
 </html>
 
 {{ end }}
+<!--
+  {{ template "frame" .}}
+  {{ template "board" . }}
+  -->

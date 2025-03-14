@@ -1,6 +1,6 @@
 {{ block "frame" . }}
 <div id="frame" hx-target="#board">
-  <form id="claim-form" hx-post="/claim" hx-target="#board" hx-swap="afterbegin">
+  <form id="claim-form" hx-post="/claim" hx-target="#body-root" hx-swap="innerHTML">
     <input hx-preserve readonly name="start_pos" id="start_pos" type="text" />
     <input hx-preserve readonly name="end_pos" id="end_pos" type="text" />
     <button id="claim-button" type="submit">claim</button>
@@ -8,18 +8,4 @@
     <textarea id="content-input"></textarea>
   </form>
 </div>
-{{ end }}
-
-{{ block "claim-mode" . }}
-<form hx-post="/claim" hx-target="board" hx-swap="afterbegin">
-  <input hx-preserve readonly name="start_pos" id="start_pos" type="text" />
-  <input hx-preserve readonly name="end_pos" id="end_pos" type="text" />
-  <button id="claim-button" type="submit">claim</button>
-  <button id="claim-button" type="button" hx-post="/clear" hx-swap="outerHTML">clear</button>
-  <textarea id="content-input"></textarea>
-</form>
-{{ end }}
-
-{{ block "view-mode" . }}
-<button type="button" hx-get="/claim-mode" hx-target="#frame">Claim some tiles</button>
 {{ end }}

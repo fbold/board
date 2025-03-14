@@ -74,7 +74,16 @@ func main() {
 	board := newBoard()
 
 	e.GET("/", func(c echo.Context) error {
-		return c.Render(200, "index", board)
+		newBulletin := Bulletin{
+			X_:      500,
+			Y_:      500,
+			X:       1500,
+			Y:       1000,
+			Width:   float64(1000),
+			Height:  float64(500),
+			Content: "",
+		}
+		return c.Render(200, "index", newBulletin)
 	})
 
 	e.GET("/claim-mode", func(c echo.Context) error {
@@ -114,16 +123,36 @@ func main() {
 			Y_:      startY,
 			X:       endX,
 			Y:       endY,
-			Top:     float64(startY),
-			Left:    float64(startX),
 			Width:   float64(endX - startX),
 			Height:  float64(endY - startY),
 			Content: "",
 		}
 
-		board.Bulletins = append(board.Bulletins, newBulletin)
+		return c.Render(200, "claim", newBulletin)
+	})
 
-		return c.Render(200, "bulletin", newBulletin)
+	e.GET("/claim", func(c echo.Context) error {
+		start := strings.Split(c.QueryParam("from"), ",")
+		end := strings.Split(c.QueryParam("to"), ",")
+
+		x_, err1 := strconv.Atoi(start[0])
+		y_, err2 := strconv.Atoi(start[1])
+		x, err3 := strconv.Atoi(end[0])
+		y, err4 := strconv.Atoi(end[1])
+
+		if err1 != nil || err2 != nil || err3 != nil || err4 != nil {
+			fmt.Println("Error extracting ints from start or end pos")
+			return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid numbers"})
+		}
+
+		bulletinToClaim := Bulletin{
+			X_: x_,
+			Y_: y_,
+			X:  x,
+			Y:  y,
+		}
+
+		return c.Render(http.StatusOK, "claim", bulletinToClaim)
 	})
 
 	e.Logger.Fatal(e.Start(":3000"))

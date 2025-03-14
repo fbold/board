@@ -11,10 +11,20 @@
 /* @@@@@@@@@@@@@@@@
  * BASE
  * */
+html {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
+}
+
 body {
   font-family: "IBMPlexMono", monospace;
   margin: 0;
   padding: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -182,7 +192,7 @@ body {
   border: 5px dashed #E1C6B7;
 }
 
-#bulletin-preview {
+.bulletin-preview {
   position: absolute;
   background-color: #E1C6B7;
   opacity: 0.7;
@@ -196,51 +206,80 @@ body {
   z-index: 10;
 }
 
-#bulletin-card-bg {
-  position: absolute;
-  top: 0;
+
+
+/* @@@@@@@@@@@@@@@@
+ * CLAIM VIEW
+ * */
+
+#claim-page {
   width: 100%;
   height: 100%;
   background-color: black;
-  opacity: 0.5;
-  z-index: 100;
-  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#bulletin-card {
-  position: absolute;
+#claim-bulletin-card {}
+
+.claim-bulletin-card {
   background-color: #E1C6B7;
-  opacity: 0.7;
-  border: 5px dashed #E1C6B7;
+  border: 2px dashed var(--sec-bg);
   text-align: start;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-content: start;
   padding: 4px;
-  z-index: 101;
-
-  transition: top 500ms ease-in-out, left 500ms ease-in-out;
+  z-index: 10;
+  box-shadow: 4px 3px 221px 15px rgba(255, 255, 255, 0.31);
+  -webkit-box-shadow: 4px 3px 221px 15px rgba(255, 255, 255, 0.31);
+  -moz-box-shadow: 4px 3px 221px 15px rgba(255, 255, 255, 0.31);
 }
 
-#bulletin-card-slot {
-  position: absolute;
-  left: 50%;
-  top: 15%;
-  height: 30%;
-  width: 30%;
-  transform: translateX(-50%);
-}
 
 #bulletin-claim-form {
-  position: relative;
-  scale: inherit;
-  transition: transform 200ms ease-out;
-  z-index: -10;
-
+  color: white;
+  display: flex;
+  flex-flow: column;
+  gap: 4px;
 }
 
 .bulletin {
   position: absolute;
   background-color: var(--sec-bg);
+}
+
+@keyframes card-rotate {
+
+  /* Center */
+  0% {
+    transform: rotate3d(0, 0, 0, 0deg);
+  }
+
+  /* Top Left */
+  20% {
+    transform: rotate3d(-1, 1, 0, 15deg);
+  }
+
+  /* Top Right */
+  40% {
+    transform: rotate3d(-1, -1, 0, 15deg);
+  }
+
+  /* Bottom Left */
+  60% {
+    transform: rotate3d(1, 1, 0, 15deg);
+  }
+
+  /* Bottom Right */
+  80% {
+    transform: rotate3d(1, -1, 0, 15deg);
+  }
+
+  /* Back to Center */
+  100% {
+    transform: rotate3d(0, 0, 0, 0deg);
+  }
 }

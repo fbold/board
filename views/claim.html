@@ -1,0 +1,18 @@
+{{ block "claim" . }}
+<div id="claim-page">
+  <div id="claim-container">
+    <div class="claim-bulletin-card front" style="width: {{.Width}}px; height: {{.Height}}px; scale: 0.3;">
+    </div>
+    <form id="bulletin-claim-form">
+      <span>Coords: {{ .X_ }} {{ .Y_ }}</span>
+      <span>Coords: {{ .X}} {{ .Y }}</span>
+      <input>
+      <textarea></textarea>
+      <div id="colour-picker">
+      </div>
+
+  </div>
+  </form>
+</div>
+</div>
+{{ end }}
