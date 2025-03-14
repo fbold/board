@@ -96,6 +96,17 @@ function screenToBoardSpace(x, y) {
   return [xFrame, yFrame]
 }
 
+function boardToScreenSpace(x, y) {
+  const boardRect = boardFrame?.getBoundingClientRect()
+  // don't worry, the scale stored does equal observed scale
+  //  const empiricScale = boardRect?.width / boardFrame?.offsetWidth
+  //  console.log("Screen to board space call", scale, empiricScale)
+  console.log(x, y, "input")
+  let xBoard = (x + FRAME_MARGIN) * scale + boardRect.left
+  let yBoard = (y + FRAME_MARGIN) * scale + boardRect.top
+  return [xBoard, yBoard]
+}
+
 function calculateScaleChangeCompensationVector(x, y, currentScale, newScale) {
   // first find current point in frame space, relative to origin at top-left corner
   const boardRect = boardFrame?.getBoundingClientRect()
@@ -254,4 +265,7 @@ function updateTransform() {
   boardFrame.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
 
-export { screenToBoardSpace }
+export {
+  screenToBoardSpace,
+  boardToScreenSpace
+}

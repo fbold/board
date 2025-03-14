@@ -4,7 +4,7 @@
   *
   */
 
-import { screenToBoardSpace } from "/static/js/navigation.js"
+import { screenToBoardSpace, boardToScreenSpace } from "/static/js/navigation.js"
 
 const startInput = document.getElementById("start_pos")
 const endInput = document.getElementById("end_pos")
@@ -102,20 +102,26 @@ function highlightSelectedArea(startPos, endPos) {
   showBulletinContentInput(startPos, endPos)
 }
 
-const contentPreview = document.getElementById("content-preview")
+const bulletinPreview = document.getElementById("bulletin-preview")
 function showBulletinContentInput([x_, y_], [x, y]) {
   console.log("setting bulletin content input position")
-  contentPreview.style.left = (x_ < x ? x_ : x) + "px"
-  contentPreview.style.top = (y_ < y ? y_ : y) + "px"
-  contentPreview.style.width = Math.abs(x - x_) + "px"
-  contentPreview.style.height = Math.abs(y - y_) + "px"
-  contentPreview.hidden = false
+  bulletinPreview.style.left = (x_ < x ? x_ : x) + "px"
+  bulletinPreview.style.top = (y_ < y ? y_ : y) + "px"
+  bulletinPreview.style.width = Math.abs(x - x_) + "px"
+  bulletinPreview.style.height = Math.abs(y - y_) + "px"
+  bulletinPreview.hidden = false
+
+  bulletinCard.style.left = (x_ < x ? x_ : x) + "px"
+  bulletinCard.style.top = (y_ < y ? y_ : y) + "px"
+  bulletinCard.style.width = Math.abs(x - x_) + "px"
+  bulletinCard.style.height = Math.abs(y - y_) + "px"
+  bulletinCard.hidden = false
 }
 
 
 const contentInput = document.getElementById("content-input")
 contentInput.addEventListener("input", (e) => {
-  contentPreview.innerHTML = e.target.value
+  bulletinPreview.innerHTML = e.target.value
 })
 
 
@@ -123,12 +129,29 @@ contentInput.addEventListener("input", (e) => {
 // CLAIM FORM
 //
 const claimForm = document.getElementById("bulletin-claim-form")
+const bulletinCardSlot = document.getElementById("bulletin-card-slot")
+const bulletinCard = document.getElementById("bulletin-card")
+
 function showClaimForm() {
   // should determine shich side of the bulletin it should go...
   // but for now just show to the left
   console.log("claim form", claimForm)
   claimForm.style.transform = "translateX(-100%)"
 
+  const cardRect = bulletinCard.getBoundingClientRect()
+  const cardSlotRect = bulletinCardSlot.getBoundingClientRect()
+
+  const [x, y] = boardToScreenSpace(cardRect.left, cardRect.top)
+  console.log("jasdlkf", x, y, cardSlotRect.x)
+
+  let targetX = cardSlotRect.x
+  let targetY = cardSlotRect.y
+
+  const [targetXBoard, targetYBoard] = screenToBoardSpace(targetX, targetY)
+
+  console.log("fjaskldjflak", targetX, targetY)
+  bulletinCard.style.top = targetYBoard + "px"
+  bulletinCard.style.left = targetXBoard + "px"
 }
 
 

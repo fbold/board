@@ -182,7 +182,7 @@ body {
   border: 5px dashed #E1C6B7;
 }
 
-#content-preview {
+#bulletin-preview {
   position: absolute;
   background-color: #E1C6B7;
   opacity: 0.7;
@@ -194,6 +194,31 @@ body {
   align-content: start;
   padding: 4px;
   z-index: 10;
+}
+
+#bulletin-card {
+  position: absolute;
+  background-color: #E1C6B7;
+  opacity: 0.7;
+  border: 5px dashed #E1C6B7;
+  text-align: start;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: start;
+  padding: 4px;
+  z-index: 10;
+
+  transition: top 500ms ease-in-out, left 500ms ease-in-out;
+}
+
+#bulletin-card-slot {
+  position: absolute;
+  left: 50%;
+  top: 15%;
+  height: 30%;
+  width: 30%;
+  transform: translateX(-50%);
 }
 
 #bulletin-claim-form {
