@@ -1,23 +1,27 @@
 {{ block "board" . }}
 <div id="board-wall" data-xpos="" data-ypos="">
   <div id="board-frame">
+    <div id="bulletin-card-bg"></div>
     <div id="board" class="board" style="">
       {{ template "bulletins" .Bulletins }}
       <div id="bulletin-outline"></div>
       <div id="bulletin-preview" class="">
-        <form id="bulletin-claim-form">
-          <input>
-        </form>
-      </div>
-      <div id="bulletin-card">
       </div>
       <div id="floating-menu">
         <div id="floating-menu-ring"></div>
         <button id="floating-menu-claim-button">click me <br /> to leave your mark</button>
       </div>
     </div>
+    <div id="bulletin-card">
+    </div>
   </div>
-  <div id="bulletin-card-slot"></div>
+  <div id="bulletin-card-display">
+    <div id="bulletin-card-slot"></div>
+    <form id="bulletin-claim-form">
+      <span>Coords: </span>
+      <input>
+    </form>
+  </div>
 </div>
 {{ end }}
 
@@ -33,5 +37,3 @@
   {{ .Content }}
 </div>
 {{ end }}
-<div id="bulletin-card">
-</div>

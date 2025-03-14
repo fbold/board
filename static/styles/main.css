@@ -196,6 +196,17 @@ body {
   z-index: 10;
 }
 
+#bulletin-card-bg {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.5;
+  z-index: 100;
+  pointer-events: none;
+}
+
 #bulletin-card {
   position: absolute;
   background-color: #E1C6B7;
@@ -207,7 +218,7 @@ body {
   flex-wrap: wrap;
   align-content: start;
   padding: 4px;
-  z-index: 10;
+  z-index: 101;
 
   transition: top 500ms ease-in-out, left 500ms ease-in-out;
 }
