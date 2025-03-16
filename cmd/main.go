@@ -74,20 +74,16 @@ func main() {
 	board := newBoard()
 
 	e.GET("/", func(c echo.Context) error {
-		newBulletin := Bulletin{
-			X_:      500,
-			Y_:      500,
-			X:       1500,
-			Y:       1000,
-			Width:   float64(1000),
-			Height:  float64(500),
-			Content: "",
-		}
-		return c.Render(200, "index", newBulletin)
-	})
-
-	e.GET("/claim-mode", func(c echo.Context) error {
-		return c.Render(200, "claim-mode", board)
+		//		newBulletin := Bulletin{
+		//			X_:      500,
+		//			Y_:      500,
+		//			X:       1500,
+		//			Y:       1000,
+		//			Width:   float64(1000),
+		//			Height:  float64(500),
+		//			Content: "",
+		//		}
+		return c.Render(200, "index-board", board)
 	})
 
 	e.POST("/clear", func(c echo.Context) error {
@@ -128,7 +124,8 @@ func main() {
 			Content: "",
 		}
 
-		return c.Render(200, "claim", newBulletin)
+		c.Response().Header().Set("HX-Location", fmt.Sprint("/claim?from=", c.FormValue("start_pos"), "&to=", c.FormValue("end_pos")))
+		return c.Render(200, "index-claim", newBulletin)
 	})
 
 	e.GET("/claim", func(c echo.Context) error {
@@ -146,13 +143,59 @@ func main() {
 		}
 
 		bulletinToClaim := Bulletin{
-			X_: x_,
-			Y_: y_,
-			X:  x,
-			Y:  y,
+			X_:     x_,
+			Y_:     y_,
+			X:      x,
+			Y:      y,
+			Width:  float64(x - x_),
+			Height: float64(y - y_),
 		}
 
-		return c.Render(http.StatusOK, "claim", bulletinToClaim)
+		return c.Render(http.StatusOK, "index-claim", bulletinToClaim)
+	})
+
+	e.POST("/bulletin", func(c echo.Context) error {
+		start := strings.Split(c.FormValue("start_pos"), ",")
+		end := strings.Split(c.FormValue("end_pos"), ",")
+
+		fmt.Println(start, end)
+
+		startX, err1 := strconv.Atoi(start[0])
+		startY, err2 := strconv.Atoi(start[1])
+		endX, err3 := strconv.Atoi(end[0])
+		endY, err4 := strconv.Atoi(end[1])
+		fmt.Println(startX, startY, endX, endY)
+
+		if err1 != nil || err2 != nil || err3 != nil || err4 != nil {
+			fmt.Println("Error extracting ints from start or end pos")
+			return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid numbers"})
+		}
+
+		content := c.FormValue("content")
+		//TODO make sure content doesn't exceed bulletin bounds
+
+		if startX > endX {
+			startX, endX = endX, startX
+		}
+		if startY > endY {
+			startY, endY = endY, startY
+		}
+
+		fmt.Println(startX, endX, startY, endY)
+
+		newBulletin := Bulletin{
+			X_:      startX,
+			Y_:      startY,
+			X:       endX,
+			Y:       endY,
+			Width:   float64(endX - startX),
+			Height:  float64(endY - startY),
+			Content: content,
+		}
+		board.Bulletins = append(board.Bulletins, newBulletin)
+
+		c.Response().Header().Set("HX-Location", "/")
+		return c.Render(200, "index", board)
 	})
 
 	e.Logger.Fatal(e.Start(":3000"))

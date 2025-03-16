@@ -1,6 +1,37 @@
-{{ block "index" . }}
+{{ block "index-board" . }}
 <!DOCTYPE html>
 <html lang="en">
+{{ template "head" .}}
+
+<body id="body-root">
+  {{ template "frame" .}}
+  {{ template "board" . }}
+
+  <script type="module" src="/static/js/main.js"></script>
+</body>
+
+
+</html>
+
+{{ end }}
+
+{{ block "index-claim" . }}
+<!DOCTYPE html>
+<html lang="en">
+{{ template "head" .}}
+
+<body id="body-root">
+  {{ template "claim" .}}
+
+  <script type="module" src="/static/js/main.js"></script>
+</body>
+
+
+</html>
+
+{{ end }}
+
+{{ block "head" . }}
 
 <head>
   <title></title>
@@ -11,18 +42,9 @@
     crossorigin="anonymous"></script>
   <link rel="stylesheet" type="text/css" href="/static/styles/main.css">
 </head>
-
-<body id="body-root">
-  {{ template "claim" . }}
-
-  <script type="module" src="/static/js/main.js"></script>
-</body>
-
-
-</html>
-
 {{ end }}
 <!--
+  {{ template "claim" . }}
   {{ template "frame" .}}
   {{ template "board" . }}
   -->

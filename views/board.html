@@ -25,7 +25,7 @@
 
 {{ block "bulletin" . }}
 <div class="bulletin"
-  style="position: absolute; top: {{ .Top }}px; left: {{.Left}}px; width: {{ .Width }}px; height: {{ .Height }}px;">
+  style="position: absolute; left: {{.X_}}px; top: {{ .Y_ }}px; width: {{ .Width }}px; height: {{ .Height }}px;">
   {{ .Content }}
 </div>
 {{ end }}

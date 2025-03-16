@@ -45,18 +45,19 @@ function showFloatingMenu([x, y]) {
   floatingMenu.hidden = false
   floatingMenu.classList.add("appear")
 }
-board.addEventListener("dblclick", (e) => {
+board?.addEventListener("dblclick", (e) => {
   const [x, y] = screenToBoardSpace(e.x, e.y)
   startPos = [Math.round(x), Math.round(y)]
   showFloatingMenu(startPos)
   setStartInput(startPos)
 })
 
-floatingMenuClaimButtom.onclick = () => {
-  selecting = true
-  board.style.cursor = "crosshair"
-  hideFloatingMenu()
-}
+if (floatingMenuClaimButtom)
+  floatingMenuClaimButtom.onclick = () => {
+    selecting = true
+    board.style.cursor = "crosshair"
+    hideFloatingMenu()
+  }
 
 window.addEventListener("mousemove", (e) => {
   //if (!window.claimMode) return
@@ -68,7 +69,7 @@ window.addEventListener("mousemove", (e) => {
   showBulletinOutline(startPos, endPos)
 })
 
-board.addEventListener("click", (e) => {
+board?.addEventListener("click", (e) => {
   if (!selecting) return
   if (e.target.id !== "board") return
   console.log("end click")
@@ -78,7 +79,7 @@ board.addEventListener("click", (e) => {
   selecting = false
   board.style.cursor = "grab"
   highlightSelectedArea(startPos, endPos)
-  showClaimForm()
+  //showClaimForm()
 })
 
 const bulletinOutline = document.getElementById("bulletin-outline")
@@ -120,7 +121,7 @@ function showBulletinContentInput([x_, y_], [x, y]) {
 
 
 const contentInput = document.getElementById("content-input")
-contentInput.addEventListener("input", (e) => {
+contentInput?.addEventListener("input", (e) => {
   bulletinPreview.innerHTML = e.target.value
 })
 
@@ -128,35 +129,6 @@ contentInput.addEventListener("input", (e) => {
 // @@@@@@@@@
 // CLAIM FORM
 //
-const claimForm = document.getElementById("bulletin-claim-form")
-const bulletinCardSlot = document.getElementById("bulletin-card-slot")
-const bulletinCard = document.getElementById("bulletin-card")
-
-function showClaimForm() {
-  // should determine shich side of the bulletin it should go...
-  // but for now just show to the left
-  console.log("claim form", claimForm)
-  claimForm.style.transform = "translateX(-100%)"
-
-  const cardRect = bulletinCard.getBoundingClientRect()
-  const cardSlotRect = bulletinCardSlot.getBoundingClientRect()
-
-  const [x, y] = boardToScreenSpace(cardRect.left, cardRect.top)
-  console.log("jasdlkf", x, y, cardSlotRect.x)
-
-  let targetX = cardSlotRect.x
-  let targetY = cardSlotRect.y
-
-  const [targetXBoard, targetYBoard] = screenToBoardSpace(targetX, targetY)
-
-  console.log("fjaskldjflak", targetX, targetY)
-  bulletinCard.style.top = targetYBoard + "px"
-  bulletinCard.style.left = targetXBoard + "px"
-}
-
-
-
-
 
 
 

@@ -20,13 +20,15 @@ const boardWall = document.getElementById("board-wall")
 const boardFrame = document.getElementById("board-frame")
 const board = document.getElementById("board")
 
-if (!boardWall || !boardFrame || !board) throw new Error("Bruh")
+//if (!boardWall || !boardFrame || !board) throw new Error("Bruh")
 
 // center board initially
 let translateX = 0;
 let translateY = 0;
 
-boardFrame.style.transform = `translate(${0}px, ${0}px)`
+if (boardFrame) {
+  boardFrame.style.transform = `translate(${0}px, ${0}px)`
+}
 let startX, startY;
 let isDragging = false;
 
@@ -50,6 +52,7 @@ zoomOnPoint(-10, -1, -1)
 
 
 function setScaleRange() {
+  if (!boardFrame) return
   const widthRatio = window.innerWidth / boardFrame.offsetWidth
   const heightRatio = window.innerHeight / boardFrame.offsetHeight
 
@@ -68,7 +71,7 @@ window.addEventListener("resize", () => {
 })
 
 // mouse scroll zooming
-boardWall.addEventListener("wheel", (event) => {
+boardWall?.addEventListener("wheel", (event) => {
   if (window.claimMode) return
   event.preventDefault();
   //console.log(event.clientX)
@@ -88,6 +91,7 @@ function debugMarker(x, y, color) {
 
 function screenToBoardSpace(x, y) {
   const boardRect = boardFrame?.getBoundingClientRect()
+  if (!boardRect) return
   // don't worry, the scale stored does equal observed scale
   //  const empiricScale = boardRect?.width / boardFrame?.offsetWidth
   //  console.log("Screen to board space call", scale, empiricScale)
@@ -98,6 +102,7 @@ function screenToBoardSpace(x, y) {
 
 function boardToScreenSpace(x, y) {
   const boardRect = boardFrame?.getBoundingClientRect()
+  if (!boardRect) return
   // don't worry, the scale stored does equal observed scale
   //  const empiricScale = boardRect?.width / boardFrame?.offsetWidth
   //  console.log("Screen to board space call", scale, empiricScale)
@@ -110,6 +115,7 @@ function boardToScreenSpace(x, y) {
 function calculateScaleChangeCompensationVector(x, y, currentScale, newScale) {
   // first find current point in frame space, relative to origin at top-left corner
   const boardRect = boardFrame?.getBoundingClientRect()
+  if (!boardRect) return
   let xFrame = (x - boardRect.left) / currentScale
   let yFrame = (y - boardRect.top) / currentScale
   // calculate where it will be with new scale
@@ -160,18 +166,27 @@ function zoomOnPoint(scaleFactor, x, y) {
 // this allows board frame to give some margin between board and window edge while maintaining control
 // to adjust this edge just adjust width and height of #board-frame
 function setTranslateX(value, overrideScale) {
+  if (!boardFrame || !boardWall) return
   let scaledX = 0
   if (overrideScale)
     scaledX = boardFrame.offsetWidth * overrideScale
   else
     scaledX = boardFrame.getBoundingClientRect().width
 
-  const newTranslateX = Math.min(Math.max(value, boardWall.clientWidth - scaledX), 0)
-  if (Math.round(value) != Math.round(newTranslateX)) console.log("CLAMPED")
+  //console.log(value, scaledX, boardWall.clientWidth, boardWall.clientWidth - scaledX)
+
+  // this doesn't include the translate, this is the left value to center it on the wall
+  const boardFrameLeft = parseFloat(boardFrame.style.left.split("px")[0])
+  console.log("board frame rect", boardFrameLeft)
+
+  const newTranslateX = Math.min(Math.max(value, (boardWall.clientWidth - scaledX - boardFrameLeft)), -boardFrameLeft)
+  if (Math.round(value) != Math.round(newTranslateX)) console.log("CLAMPED TO ", newTranslateX)
   //console.log("X Set Translate X:", boardWall.clientWidth, scaledX, newTranslateX)
   translateX = newTranslateX
 }
 function setTranslateY(value, overrideScale) {
+  if (!boardFrame || !boardWall) return
+  let scaledX = 0
   let scaledY = 0
   if (overrideScale)
     scaledY = boardFrame.offsetHeight * overrideScale
@@ -185,7 +200,9 @@ function setTranslateY(value, overrideScale) {
 
 
 // mouse panning
-boardWall.addEventListener("mousedown", (event) => {
+document.addEventListener("mousedown", (event) => {
+  if (!board) return
+  let scaledX = 0
   if (window.claimMode) return
   isDragging = true;
   startX = event.clientX - translateX;
@@ -205,6 +222,7 @@ document.addEventListener("mousemove", (event) => {
 });
 
 document.addEventListener("mouseup", () => {
+  if (!board) return
   if (window.claimMode) return
   isDragging = false;
   board.style.cursor = "grab";
@@ -215,7 +233,7 @@ document.addEventListener("mouseup", () => {
   * ===================
 */
 // touch pan and pinch zoom
-boardWall.addEventListener("touchstart", (event) => {
+boardWall?.addEventListener("touchstart", (event) => {
   if (window.claimMode) return
   if (event.touches.length === 1) {
     // Single touch for panning
@@ -230,7 +248,7 @@ boardWall.addEventListener("touchstart", (event) => {
   }
 });
 
-boardWall.addEventListener("touchmove", (event) => {
+boardWall?.addEventListener("touchmove", (event) => {
   if (window.claimMode) return
   if (event.touches.length === 1 && isDragging) {
     // Single finger drag for panning
@@ -241,13 +259,10 @@ boardWall.addEventListener("touchmove", (event) => {
     // Two-finger pinch for zooming
     const newDistance = getDistance(event.touches[0], event.touches[1]);
     const scaleFactor = newDistance / pinchStartDistance;
-    zoom(pinchStartScale * scaleFactor / scale,
-      (event.touches[0].clientX + event.touches[1].clientX) / 2,
-      (event.touches[0].clientY + event.touches[1].clientY) / 2);
   }
 });
 
-boardWall.addEventListener("touchend", () => {
+boardWall?.addEventListener("touchend", () => {
   if (window.claimMode) return
   isDragging = false;
 });
@@ -262,6 +277,7 @@ function getDistance(touch1, touch2) {
 function updateTransform() {
   //  boardFrame.style.transform = `translate(${translateX}px, ${translateY}px)`;
   //  board.style.transform = `scale(${scale})`;
+  if (!boardFrame) return
   boardFrame.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
 
