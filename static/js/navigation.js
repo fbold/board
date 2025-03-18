@@ -179,7 +179,14 @@ function setTranslateX(value, overrideScale) {
   const boardFrameLeft = parseFloat(boardFrame.style.left.split("px")[0])
   console.log("board frame rect", boardFrameLeft)
 
-  const newTranslateX = Math.min(Math.max(value, (boardWall.clientWidth - scaledX - boardFrameLeft)), -boardFrameLeft)
+  const newTranslateX = Math.min(
+    // the value (which is negative) or the total x 
+    Math.max(value, (boardWall.clientWidth - scaledX - boardFrameLeft)),
+    // should only applied when doesn't have to be centered, so once zoomed
+    //Math.abs(boardFrame.clientWidth - boardWall.clientWidth) < 30 ? -boardFrameLeft : 0
+    0
+  )
+
   if (Math.round(value) != Math.round(newTranslateX)) console.log("CLAMPED TO ", newTranslateX)
   //console.log("X Set Translate X:", boardWall.clientWidth, scaledX, newTranslateX)
   translateX = newTranslateX
