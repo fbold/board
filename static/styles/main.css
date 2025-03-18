@@ -74,8 +74,8 @@ body {
   position: relative;
   transform-origin: top left;
   background-color: transparent;
-  width: calc(3840px + 200px);
-  height: calc(2160px + 200px);
+  width: calc(2002px + 200px);
+  height: calc(2002px + 200px);
 }
 
 #board {
@@ -86,11 +86,13 @@ body {
   font-size: 1rem;
   top: 100px;
   left: 100px;
-  width: 3840px;
-  height: 2160px;
+  width: 2002px;
+  height: 2002px;
   transform-origin: top left;
-  background-size: 40px 40px;
-  background-image: radial-gradient(circle, black 2px, white 3px);
+  background-size: 100px 100px;
+  background-image:
+    linear-gradient(to right, grey 2px, transparent 2px),
+    linear-gradient(to bottom, grey 2px, transparent 2px);
 }
 
 .bulletin {
@@ -211,6 +213,7 @@ body {
 
 .bulletin-preview {
   position: absolute;
+  pointer-events: none;
   background-color: #E1C6B7;
   opacity: 0.7;
   border: 2px dashed var(--sec-bg);

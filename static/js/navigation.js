@@ -173,35 +173,42 @@ function setTranslateX(value, overrideScale) {
   else
     scaledX = boardFrame.getBoundingClientRect().width
 
-  //console.log(value, scaledX, boardWall.clientWidth, boardWall.clientWidth - scaledX)
+  // this keeps it centered as we zoom in if this dimesion is smaller than window's
+  if (scaledX < boardWall.clientWidth)
+    boardFrame.style.left = (window.innerWidth - scaledX) / 2 + "px"
 
   // this doesn't include the translate, this is the left value to center it on the wall
   const boardFrameLeft = parseFloat(boardFrame.style.left.split("px")[0])
-  console.log("board frame rect", boardFrameLeft)
 
   const newTranslateX = Math.min(
     // the value (which is negative) or the total x 
     Math.max(value, (boardWall.clientWidth - scaledX - boardFrameLeft)),
-    // should only applied when doesn't have to be centered, so once zoomed
-    //Math.abs(boardFrame.clientWidth - boardWall.clientWidth) < 30 ? -boardFrameLeft : 0
-    0
+    // should only applied when doesn't have to be centered, so once zoomed enough that board is >= wall
+    scaledX >= boardWall.clientWidth ? -boardFrameLeft : 0
   )
 
-  if (Math.round(value) != Math.round(newTranslateX)) console.log("CLAMPED TO ", newTranslateX)
-  //console.log("X Set Translate X:", boardWall.clientWidth, scaledX, newTranslateX)
   translateX = newTranslateX
 }
 function setTranslateY(value, overrideScale) {
   if (!boardFrame || !boardWall) return
-  let scaledX = 0
   let scaledY = 0
   if (overrideScale)
     scaledY = boardFrame.offsetHeight * overrideScale
   else
     scaledY = boardFrame.getBoundingClientRect().height
 
-  const newTranslateY = Math.min(Math.max(value, boardWall.clientHeight - scaledY), 0)
-  //console.log("Y Set Translate Y:", boardWall.clientHeight, scaledY, newTranslateY)
+  // this keeps it centered as we zoom in if this dimesion is smaller than window's
+  if (scaledY < boardWall.clientHeight)
+    boardFrame.style.top = (window.innerHeight - scaledY) / 2 + "px"
+
+  const boardFrameTop = parseFloat(boardFrame.style.top.split("px")[0])
+
+  const newTranslateY = Math.min(
+    Math.max(value, boardWall.clientHeight - scaledY - boardFrameTop),
+    // should only applied when doesn't have to be centered, so once zoomed enough that board is >= wall
+    scaledY >= boardWall.clientHeight ? -boardFrameTop : 0
+  )
+
   translateY = newTranslateY
 }
 
