@@ -32,6 +32,12 @@ type Tile struct {
 	Letter string
 }
 
+type Flower struct {
+	X       int
+	Y       int
+	Message string
+}
+
 type Bulletin struct {
 	X_      int
 	Y_      int
@@ -74,15 +80,6 @@ func main() {
 	board := newBoard()
 
 	e.GET("/", func(c echo.Context) error {
-		//		newBulletin := Bulletin{
-		//			X_:      500,
-		//			Y_:      500,
-		//			X:       1500,
-		//			Y:       1000,
-		//			Width:   float64(1000),
-		//			Height:  float64(500),
-		//			Content: "",
-		//		}
 		return c.Render(200, "index-board", board)
 	})
 
@@ -194,8 +191,29 @@ func main() {
 		}
 		board.Bulletins = append(board.Bulletins, newBulletin)
 
-		c.Response().Header().Set("HX-Location", "/")
-		return c.Render(200, "index", board)
+		c.Response().Header().Set("HX-Redirect", "/")
+		return c.String(200, "redirect") //Render(200, "index-board", board)
+	})
+
+	e.POST("/flower", func(c echo.Context) error {
+		pos := strings.Split(c.FormValue("position"), ",")
+		message := c.FormValue("message")
+
+		x, err1 := strconv.Atoi(pos[0])
+		y, err2 := strconv.Atoi(pos[1])
+
+		if err1 != nil || err2 != nil {
+			fmt.Println("Error extracting ints from start or end pos")
+			return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid numbers"})
+		}
+
+		flower := Flower{
+			X:       x,
+			Y:       y,
+			Message: message,
+		}
+
+		return c.Render(http.StatusOK, "flower", flower)
 	})
 
 	e.Logger.Fatal(e.Start(":3000"))

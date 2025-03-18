@@ -40,6 +40,7 @@ body {
 :root {
   --pri-bg: #F5E6E8;
   --sec-bg: #E1C6B7;
+  --grass: #84B779;
 }
 
 
@@ -96,22 +97,63 @@ body {
 }
 
 .bulletin {
-  background-color: #E1C6B7;
+  position: absolute;
+  background-color: var(--grass);
   color: black;
   border: 2px dashed var(--sec-bg);
-  text-align: start;
+  text-align: center;
   display: flex;
   font-size: 1rem;
   transform-origin: top left;
   flex-direction: row;
   flex-wrap: wrap;
-  align-content: start;
+  justify-content: center;
+  align-content: center;
   padding: 4px;
   z-index: 10;
   text-wrap: wrap;
   word-break: break-all;
   word-wrap: break-word;
+  user-select: none;
+  /* Safari */
+  -webkit-user-select: none;
 }
+
+/* @@@@@@@@@@@@@@@@
+ * FLOWER PLANTING
+ * */
+
+#flower-preview {
+  position: absolute;
+  z-index: 20;
+  pointer-events: none;
+}
+
+#flower-preview form {
+  pointer-events: all;
+  position: absolute;
+  opacity: 0;
+  transition: opacity 200ms;
+  transform-origin: top left;
+  background-color: var(--sec-bg);
+  display: flex;
+  padding: 5px;
+  gap: 5px;
+  flex-direction: column;
+  border-radius: 5px;
+}
+
+#flowers-layer {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.flower {
+  position: absolute;
+}
+
 
 /* @@@@@@@@@@@@@@@@
  * FLOATING MENU
@@ -123,11 +165,12 @@ body {
   align-items: center;
   justify-content: center;
   position: absolute;
+  z-index: 50;
 }
 
 #floating-menu-ring {
-  width: 15px;
-  height: 15px;
+  width: 25px;
+  height: 25px;
   transform: translate(-50%, -50%);
   border: 3px solid var(--sec-bg);
   border-radius: 50%;
@@ -145,7 +188,7 @@ body {
   scale: 1;
 }
 
-#floating-menu-claim-button {
+#floating-menu-buttons>button {
   height: 1rem;
   font-size: 2rem;
   width: min-content;
@@ -214,7 +257,7 @@ body {
 .bulletin-preview {
   position: absolute;
   pointer-events: none;
-  background-color: #E1C6B7;
+  background-color: var(--grass);
   opacity: 0.7;
   border: 2px dashed var(--sec-bg);
   text-align: start;
@@ -285,10 +328,6 @@ body {
   gap: 4px;
 }
 
-.bulletin {
-  position: absolute;
-  background-color: var(--sec-bg);
-}
 
 @keyframes card-rotate {
 

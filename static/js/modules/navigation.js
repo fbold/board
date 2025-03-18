@@ -297,5 +297,6 @@ function updateTransform() {
 
 export {
   screenToBoardSpace,
-  boardToScreenSpace
+  boardToScreenSpace,
+  scale as currentBoardScale,
 }

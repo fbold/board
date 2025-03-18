@@ -4,7 +4,8 @@
   *
   */
 
-import { screenToBoardSpace, boardToScreenSpace } from "/static/js/navigation.js"
+import { hideFloatingMenu, showFloatingMenu } from "./floating-menu.js"
+import { screenToBoardSpace, boardToScreenSpace } from "./navigation.js"
 
 const startInput = document.getElementById("start_pos")
 const endInput = document.getElementById("end_pos")
@@ -31,26 +32,21 @@ let selecting = false
 
 const board = document.getElementById("board")
 
-const floatingMenu = document.getElementById("floating-menu")
 const floatingMenuClaimButtom = document.getElementById("floating-menu-claim-button")
 
 
-function hideFloatingMenu() {
-  floatingMenu.hidden = true
-  floatingMenu.classList.add("disappear")
-}
-function showFloatingMenu([x, y]) {
-  floatingMenu.style.left = x + "px"
-  floatingMenu.style.top = y + "px"
-  floatingMenu.hidden = false
-  floatingMenu.classList.add("appear")
-}
-board?.addEventListener("dblclick", (e) => {
+function handleDoubleClick(e) {
   const [x, y] = screenToBoardSpace(e.x, e.y)
   startPos = [Math.round(x), Math.round(y)]
-  showFloatingMenu(startPos)
+  showFloatingMenu(startPos, [{
+    text: "Claim Land", onclick: () => {
+      selecting = true
+      board.style.cursor = "crosshair"
+      hideFloatingMenu()
+    }
+  }])
   setStartInput(startPos)
-})
+}
 
 if (floatingMenuClaimButtom)
   floatingMenuClaimButtom.onclick = () => {
@@ -112,11 +108,6 @@ function showBulletinContentInput([x_, y_], [x, y]) {
   bulletinPreview.style.height = Math.abs(y - y_) + "px"
   bulletinPreview.hidden = false
 
-  bulletinCard.style.left = (x_ < x ? x_ : x) + "px"
-  bulletinCard.style.top = (y_ < y ? y_ : y) + "px"
-  bulletinCard.style.width = Math.abs(x - x_) + "px"
-  bulletinCard.style.height = Math.abs(y - y_) + "px"
-  bulletinCard.hidden = false
 }
 
 
@@ -131,6 +122,9 @@ contentInput?.addEventListener("input", (e) => {
 //
 
 
+export {
+  handleDoubleClick
+}
 
 
 

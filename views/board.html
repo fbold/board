@@ -3,12 +3,22 @@
   <div id="board-frame">
     <div id="board" class="board" style="">
       {{ template "bulletins" .Bulletins }}
+      <div id="flowers-layer"></div>
       <div id="bulletin-outline"></div>
       <div id="bulletin-preview" class="">
       </div>
+      <div id="flower-preview">
+        F
+        <form id="flower-preview-form" hx-post="/flower" hx-swap="beforeend" hx-target="#flowers-layer">
+          <input name="position" type="text" readonly>
+          <input name="message" type="text" placeholder="optional message">
+          <button type="submit">Submit Plant Request</button>
+        </form>
+      </div>
       <div id="floating-menu">
         <div id="floating-menu-ring"></div>
-        <button id="floating-menu-claim-button">click me <br /> to leave your mark</button>
+        <div id="floating-menu-buttons">
+        </div>
       </div>
     </div>
     <div id="bulletin-card">
