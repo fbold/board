@@ -30,5 +30,5 @@ function showFloatingMenu([x, y], buttons) {
 
 export {
   showFloatingMenu,
-  hideFloatingMenu
+  hideFloatingMenu,
 }

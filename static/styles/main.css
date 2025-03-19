@@ -100,7 +100,7 @@ body {
   position: absolute;
   background-color: var(--grass);
   color: black;
-  border: 2px dashed var(--sec-bg);
+  /*border: 2px dashed var(--sec-bg);*/
   text-align: center;
   display: flex;
   font-size: 1rem;
@@ -127,6 +127,27 @@ body {
   position: absolute;
   z-index: 20;
   pointer-events: none;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+}
+
+#flower-preview-circle {
+  border: 4px var(--sec-bg) solid;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  display: block;
+}
+
+#flower-preview-circle img {
+  width: 100%;
+  height: 100%;
 }
 
 #flower-preview form {
@@ -135,12 +156,25 @@ body {
   opacity: 0;
   transition: opacity 200ms;
   transform-origin: top left;
+  left: 100%;
+  top: 100%;
   background-color: var(--sec-bg);
   display: flex;
   padding: 5px;
   gap: 5px;
   flex-direction: column;
   border-radius: 5px;
+}
+
+#flower-preview-form.left {
+  left: 0;
+  transform: translateX(-100%)
+}
+
+#flower-preview-form .buttons {
+  display: flex;
+  gap: 5px;
+  width: 100%;
 }
 
 #flowers-layer {
@@ -151,7 +185,12 @@ body {
 }
 
 .flower {
+  pointer-events: visibleFill;
   position: absolute;
+  transform-origin: center;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
 }
 
 

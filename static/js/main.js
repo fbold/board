@@ -1,6 +1,7 @@
 import * as navigation from "./modules/navigation.js"
 import * as claim from "./modules/claim.js"
 import * as plant from "./modules/plant.js"
+import { hideFloatingMenu } from "./modules/floating-menu.js"
 
 //document.body.addEventListener('htmx:configRequest', function(evt) {
 //  console.log(evt.detail.elt.id)
@@ -18,12 +19,11 @@ window.claimMode = false
 
 window.addEventListener("dblclick", (e) => {
   console.log("handling dblclick")
+  hideFloatingMenu()
 
-  if (e.target.id === "board") {
+  if (e.target.id === "board")
     claim.handleDoubleClick(e)
-  }
 
-  console.log(e)
   if (e.target.classList.contains("bulletin"))
     plant.handleDoubleClick(e)
 

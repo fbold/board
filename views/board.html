@@ -8,11 +8,16 @@
       <div id="bulletin-preview" class="">
       </div>
       <div id="flower-preview">
-        F
+        <div id="flower-preview-circle">
+          <img src="/static/images/flower-1.svg" />
+        </div>
         <form id="flower-preview-form" hx-post="/flower" hx-swap="beforeend" hx-target="#flowers-layer">
           <input name="position" type="text" readonly>
           <input name="message" type="text" placeholder="optional message">
-          <button type="submit">Submit Plant Request</button>
+          <div class="buttons">
+            <button type="button" id="move-flower-button">Move</button>
+            <button type="submit">Submit Plant Request</button>
+          </div>
         </form>
       </div>
       <div id="floating-menu">
