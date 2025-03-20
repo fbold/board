@@ -12,11 +12,14 @@
           <img src="/static/images/flower-1.svg" />
         </div>
         <form id="flower-preview-form" hx-post="/flower" hx-swap="beforeend" hx-target="#flowers-layer">
+          <label for="position">Position:</label>
           <input name="position" type="text" readonly>
+          <label for="message">Flower Message:</label>
           <input name="message" type="text" placeholder="optional message">
           <div class="buttons">
             <button type="button" id="move-flower-button">Move</button>
-            <button type="submit">Submit Plant Request</button>
+            <button type="button" id="cancel-flower-button">Cancel</button>
+            <button type="submit" id="submit-flower-button">Request Planting</button>
           </div>
         </form>
       </div>

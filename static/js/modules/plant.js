@@ -13,6 +13,17 @@ function endPlanting() {
   flowerPreview.hidden = true
 }
 
+function showForm(left = false) {
+  if (left)
+    flowerPreviewForm.classList.add("left")
+  else flowerPreviewForm.classList.remove("left")
+  flowerPreviewForm.style.opacity = 1
+}
+
+function hideForm() {
+  flowerPreviewForm.style.opacity = 0
+}
+
 htmx.on("#flower-preview-form", "htmx:afterRequest", (e) => {
   console.log(e)
   if (e.detail.success) {
@@ -23,7 +34,8 @@ htmx.on("#flower-preview-form", "htmx:afterRequest", (e) => {
 
 const moveFlowerButton = document.getElementById("move-flower-button")
 moveFlowerButton.onclick = () => {
-  planting = true
+  hideForm()
+  setTimeout(() => planting = true, 100)
 }
 
 function handleDoubleClick(e) {
@@ -53,9 +65,7 @@ window.addEventListener("click", (e) => {
     planting = false
     flowerPreviewFormPosition.value = flowerPos.join(",")
     flowerPreviewForm.style.scale = 1 / currentBoardScale
-    if (flowerPos[0] > 1500)
-      flowerPreviewForm.classList.add("left")
-    else flowerPreviewForm.classList.remove("left")
+    showForm(flowerPos[0] > 1500)
     flowerPreviewForm.style.opacity = 1
   }
 })
