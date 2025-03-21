@@ -1,0 +1,21 @@
+services:
+  db:
+    container_name: meadow-db
+    image: postgres:17-alpine
+    env_file:
+      - .env
+    volumes:
+      - meadow-data:/var/lib/postgresql/data
+    ports:
+      - 6001:5432
+    networks:
+      - meadow-network
+
+networks:
+  meadow-network:
+    name: meadow-network
+  devbot-wallace-network:
+    external: true
+
+volumes:
+  meadow-data:
