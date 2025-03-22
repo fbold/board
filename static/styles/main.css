@@ -19,7 +19,6 @@ html {
 }
 
 body {
-  font-family: "IBMPlexMono", monospace;
   margin: 0;
   padding: 0;
   width: 100vw;
@@ -34,7 +33,6 @@ body {
 *::before,
 *::after {
   box-sizing: inherit;
-  font-family: "IBMPlexMono", monospace;
 }
 
 :root {
@@ -44,7 +42,9 @@ body {
   /*--grass: #357960;*/
   /*--grass: #1f7461;*/
   /*--grass: #01994A;*/
-  --grass: #24854A;
+  --grass: #ecd3b2;
+  --text: #382418;
+  --accent: #624632;
 }
 
 
@@ -81,10 +81,18 @@ body {
   background-color: transparent;
   width: calc(2002px + 200px);
   height: calc(2002px + 200px);
+  /* idk about this, stops cutoff of dots grid */
+  background-size: 40px 40px;
+  background-position: 1px 1px;
+  /*background-image:
+    linear-gradient(to right, grey 2px, transparent 2px),
+    linear-gradient(to bottom, grey 2px, transparent 2px);*/
+  background-image: radial-gradient(rgb(98, 70, 50, 0.3) 2px, transparent 2px);
 }
 
 #board {
   cursor: grab;
+  background-clip: content-box;
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -94,16 +102,18 @@ body {
   width: 2002px;
   height: 2002px;
   transform-origin: top left;
-  background-size: 100px 100px;
-  background-image:
+  background-size: 40px 40px;
+  background-position: -19px -19px;
+  /*background-image:
     linear-gradient(to right, grey 2px, transparent 2px),
-    linear-gradient(to bottom, grey 2px, transparent 2px);
+    linear-gradient(to bottom, grey 2px, transparent 2px);*/
+  background-image: radial-gradient(var(--accent) 2px, transparent 2px);
 }
 
 .bulletin {
   position: absolute;
   background-color: var(--grass);
-  color: white;
+  color: var(--text);
   /*border: 2px dashed var(--sec-bg);*/
   text-align: center;
   display: flex;
@@ -137,7 +147,7 @@ body {
 }
 
 #flower-preview-circle {
-  border: 4px var(--sec-bg) solid;
+  border: 4px var(--accent) solid;
   border-radius: 50%;
   position: absolute;
   top: 50%;
@@ -162,12 +172,12 @@ body {
   transform-origin: top left;
   left: 100%;
   top: 100%;
-  background-color: var(--sec-bg);
+  background-color: var(--accent);
   display: flex;
   padding: 5px;
   gap: 5px;
   flex-direction: column;
-  border-radius: 5px;
+  border-radius: 1px;
   color: white;
   font-size: 1rem;
 }
@@ -223,7 +233,7 @@ body {
   width: 25px;
   height: 25px;
   transform: translate(-50%, -50%);
-  border: 3px solid var(--sec-bg);
+  border: 3px solid var(--accent);
   border-radius: 50%;
   position: absolute;
   transition: scale 100ms ease-out;
@@ -251,7 +261,7 @@ body {
   text-wrap: nowrap;
   position: relative;
   left: -100%;
-  background-color: var(--sec-bg);
+  background-color: var(--accent);
   border-radius: 5px;
   padding: 5px 10px;
   border: none;
