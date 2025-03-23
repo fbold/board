@@ -1,7 +1,19 @@
 package main
 
 import (
-	"github.com/jackc/pgx/v5"
+	"context"
+	"fmt"
+	"os"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func connect() (*pgx.Conn
+func Connect() *pgxpool.Pool {
+	dbpool, err := pgxpool.New(context.Background(), os.Getenv("DATABASE_URL"))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to create connection pool: %v\n", err)
+		os.Exit(1)
+	}
+
+	return dbpool
+}

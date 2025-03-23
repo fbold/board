@@ -1,17 +1,18 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"html/template"
 	"io"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-
-	"database"
 )
 
 type TemplateRenderer struct {
@@ -73,11 +74,27 @@ func newBoard() Board {
 }
 
 func main() {
+	errEnv := godotenv.Load()
+	if errEnv != nil {
+	}
+
 	e := echo.New()
 	e.Use(middleware.Logger())
 
 	e.Static("/static", "static")
 	e.Renderer = newTemplateRenderer()
+
+	dbpool := Connect()
+	// defer defers the running of this to the end of the program, ie befor exit, as i understand
+	defer dbpool.Close()
+
+	var greeting string
+	err := dbpool.QueryRow(context.Background(), "select 'Hello World!'").Scan(&greeting)
+	if err != nil {
+		fmt.Printf("nah bro %v", err)
+		os.Exit(1)
+	}
+	fmt.Println(greeting)
 
 	board := newBoard()
 
