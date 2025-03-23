@@ -1,4 +1,9 @@
 {{ block "frame" . }}
+<div id="board-title">
+  <h1>
+    The Canvas of Things
+  </h1>
+</div>
 <div id="frame" hx-target="#board">
   <form id="claim-form" hx-post="/claim" hx-target="#body-root" hx-swap="innerHTML">
     <input hx-preserve readonly name="start_pos" id="start_pos" type="text" />

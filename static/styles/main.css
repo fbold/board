@@ -16,6 +16,7 @@ html {
   height: 100vh;
   height: 100dvh;
   margin: 0;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 body {
@@ -63,6 +64,20 @@ body {
   align-items: center;
 }
 
+#board-title {
+  top: 0;
+  height: auto;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#board-title h1 {}
+
 
 
 /* @@@@@@@@@@@@@@@@
@@ -108,12 +123,14 @@ body {
     linear-gradient(to right, grey 2px, transparent 2px),
     linear-gradient(to bottom, grey 2px, transparent 2px);*/
   background-image: radial-gradient(var(--accent) 2px, transparent 2px);
+  outline: var(--accent) 4px solid;
 }
 
 .bulletin {
   position: absolute;
   background-color: var(--grass);
-  color: var(--text);
+  color: black;
+  /*color: var(--text);*/
   /*border: 2px dashed var(--sec-bg);*/
   text-align: center;
   display: flex;
