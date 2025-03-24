@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -13,6 +14,8 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+
+	"fbold/board/cmd/handlers"
 )
 
 type TemplateRenderer struct {
@@ -41,24 +44,12 @@ type Flower struct {
 	Message string
 }
 
-type Bulletin struct {
-	X_      int
-	Y_      int
-	X       int
-	Y       int
-	Top     float64
-	Left    float64
-	Width   float64
-	Height  float64
-	Content string
-}
-
 const TPS = 100 // tiles per side
 const TD = 10   // tiles dimensions
 
 type Board struct {
 	Tiles     [TPS][TPS]Tile
-	Bulletins []Bulletin
+	Bulletins []bulletin.Bulletin
 }
 
 func newBoard() Board {
@@ -99,17 +90,19 @@ func main() {
 	board := newBoard()
 
 	e.GET("/", func(c echo.Context) error {
+		board.Bulletins, err = bulletin.GetBulletins(dbpool)
+
 		return c.Render(200, "index-board", board)
 	})
 
 	e.POST("/clear", func(c echo.Context) error {
 
-		board.Bulletins = []Bulletin{}
+		board.Bulletins = []bulletin.Bulletin{}
 		return c.Render(http.StatusOK, "board", board)
 	})
 
 	e.POST("/claim", func(c echo.Context) error {
-		e.Logger.Print("====================")
+		log.Println("====================")
 		start := strings.Split(c.FormValue("start_pos"), ",")
 		end := strings.Split(c.FormValue("end_pos"), ",")
 
@@ -130,13 +123,13 @@ func main() {
 			startY, endY = endY, startY
 		}
 
-		newBulletin := Bulletin{
+		newBulletin := bulletin.Bulletin{
 			X_:      startX,
 			Y_:      startY,
 			X:       endX,
 			Y:       endY,
-			Width:   float64(endX - startX),
-			Height:  float64(endY - startY),
+			Width:   endX - startX,
+			Height:  endY - startY,
 			Content: "",
 		}
 
@@ -158,19 +151,20 @@ func main() {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid numbers"})
 		}
 
-		bulletinToClaim := Bulletin{
+		bulletinToClaim := bulletin.Bulletin{
 			X_:     x_,
 			Y_:     y_,
 			X:      x,
 			Y:      y,
-			Width:  float64(x - x_),
-			Height: float64(y - y_),
+			Width:  x - x_,
+			Height: y - y_,
 		}
 
 		return c.Render(http.StatusOK, "index-claim", bulletinToClaim)
 	})
 
 	e.POST("/bulletin", func(c echo.Context) error {
+
 		start := strings.Split(c.FormValue("start_pos"), ",")
 		end := strings.Split(c.FormValue("end_pos"), ",")
 
@@ -199,16 +193,18 @@ func main() {
 
 		fmt.Println(startX, endX, startY, endY)
 
-		newBulletin := Bulletin{
+		newBulletin := bulletin.Bulletin{
 			X_:      startX,
 			Y_:      startY,
 			X:       endX,
 			Y:       endY,
-			Width:   float64(endX - startX),
-			Height:  float64(endY - startY),
 			Content: content,
 		}
-		board.Bulletins = append(board.Bulletins, newBulletin)
+
+		err := bulletin.CreateBulletin(dbpool, newBulletin)
+		if err != nil {
+			log.Println("Failed to create Bulletin", err)
+		}
 
 		c.Response().Header().Set("HX-Redirect", "/")
 		return c.String(200, "redirect") //Render(200, "index-board", board)
