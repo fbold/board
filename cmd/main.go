@@ -44,26 +44,6 @@ type Flower struct {
 	Message string
 }
 
-const TPS = 100 // tiles per side
-const TD = 10   // tiles dimensions
-
-type Board struct {
-	Tiles     [TPS][TPS]Tile
-	Bulletins []bulletin.Bulletin
-}
-
-func newBoard() Board {
-	var board [TPS][TPS]Tile
-
-	for i := 0; i < TPS; i++ {
-		for j := 0; j < TPS; j++ {
-			board[i][j] = Tile{X: j, Y: i, Letter: strconv.Itoa(i*10 + j)}
-		}
-	}
-
-	return Board{Tiles: board}
-}
-
 func main() {
 	errEnv := godotenv.Load()
 	if errEnv != nil {
@@ -87,18 +67,20 @@ func main() {
 	}
 	fmt.Println(greeting)
 
-	board := newBoard()
-
 	e.GET("/", func(c echo.Context) error {
-		board.Bulletins, err = bulletin.GetBulletins(dbpool)
+		bulletins, err := bulletin.GetBulletins(dbpool)
+		if err != nil {
+			log.Println("Failed to retrieve bulletins")
+			return c.NoContent(http.StatusInternalServerError)
+		}
 
-		return c.Render(200, "index-board", board)
+		return c.Render(200, "index-board", bulletins)
 	})
 
 	e.POST("/clear", func(c echo.Context) error {
 
-		board.Bulletins = []bulletin.Bulletin{}
-		return c.Render(http.StatusOK, "board", board)
+		bulletins := []bulletin.Bulletin{}
+		return c.Render(http.StatusOK, "board", bulletins)
 	})
 
 	e.POST("/claim", func(c echo.Context) error {
