@@ -103,38 +103,11 @@ func main() {
 
 	e.POST("/claim", func(c echo.Context) error {
 		log.Println("====================")
-		start := strings.Split(c.FormValue("start_pos"), ",")
-		end := strings.Split(c.FormValue("end_pos"), ",")
+		start := c.FormValue("start_pos")
+		end := c.FormValue("end_pos")
 
-		startX, err1 := strconv.Atoi(start[0])
-		startY, err2 := strconv.Atoi(start[1])
-		endX, err3 := strconv.Atoi(end[0])
-		endY, err4 := strconv.Atoi(end[1])
-
-		if err1 != nil || err2 != nil || err3 != nil || err4 != nil {
-			fmt.Println("Error extracting ints from start or end pos")
-			return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid numbers"})
-		}
-
-		if startX > endX {
-			startX, endX = endX, startX
-		}
-		if startY > endY {
-			startY, endY = endY, startY
-		}
-
-		newBulletin := bulletin.Bulletin{
-			X_:      startX,
-			Y_:      startY,
-			X:       endX,
-			Y:       endY,
-			Width:   endX - startX,
-			Height:  endY - startY,
-			Content: "",
-		}
-
-		c.Response().Header().Set("HX-Location", fmt.Sprint("/claim?from=", c.FormValue("start_pos"), "&to=", c.FormValue("end_pos")))
-		return c.Render(200, "index-claim", newBulletin)
+		c.Response().Header().Set("HX-Location", fmt.Sprint("/claim?from=", start, "&to=", end))
+		return c.NoContent(200)
 	})
 
 	e.GET("/claim", func(c echo.Context) error {
@@ -149,6 +122,13 @@ func main() {
 		if err1 != nil || err2 != nil || err3 != nil || err4 != nil {
 			fmt.Println("Error extracting ints from start or end pos")
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid numbers"})
+		}
+
+		if x_ > x {
+			x_, x = x, x_
+		}
+		if y_ > y {
+			y_, y = y, y_
 		}
 
 		bulletinToClaim := bulletin.Bulletin{

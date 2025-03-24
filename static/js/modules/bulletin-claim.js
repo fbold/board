@@ -2,9 +2,6 @@ const claimFormTextarea = document.getElementById("bulletin-claim-form-textarea"
 const claimBulletinCard = document.getElementById("claim-bulletin-card")
 const claimBulletinCardSlot = document.getElementById("claim-bulletin-card-slot")
 
-console.log(claimBulletinCard)
-
-console.log("alkjksd", claimBulletinCardSlot.clientWidth, claimBulletinCard.clientWidth)
 
 const xScale = claimBulletinCardSlot.clientWidth / claimBulletinCard.offsetWidth
 const yScale = claimBulletinCardSlot.clientHeight / claimBulletinCard.offsetHeight
