@@ -22,6 +22,7 @@ document.addEventListener('htmx:afterSwap', function(evt) {
   // hx-preserve is so these js references to them aren't lost
   startInput.setAttribute("value", "")
   endInput.setAttribute("value", "")
+  bulletinClaimButton.style.display = "none";
   selecting = false
 })
 
@@ -40,6 +41,7 @@ function handleDoubleClick(e) {
   startPos = [Math.round(x), Math.round(y)]
   showFloatingMenu(startPos, [{
     text: "Claim Land", onclick: () => {
+      bulletinClaimButton.style.display = "none";
       selecting = true
       board.style.cursor = "crosshair"
       hideFloatingMenu()
@@ -75,7 +77,6 @@ board?.addEventListener("click", (e) => {
   selecting = false
   board.style.cursor = "grab"
   highlightSelectedArea(startPos, endPos)
-  //showClaimForm()
 })
 
 const bulletinOutline = document.getElementById("bulletin-outline")
@@ -89,6 +90,7 @@ function showBulletinOutline([x_, y_], [x, y]) {
   bulletinOutline.hidden = false
 }
 
+const bulletinClaimButton = document.getElementById("bulletin-claim-button")
 function highlightSelectedArea(startPos, endPos) {
   setStartInput(startPos)
   setEndInput(endPos)
@@ -96,52 +98,16 @@ function highlightSelectedArea(startPos, endPos) {
   // perhaps render an input that looks like a temp version of the bulleting
   // fomatted such that the characters you type in are placed as they would be
   // once claimed.....
-  showBulletinContentInput(startPos, endPos)
+  bulletinClaimButton.setAttribute("href", `/claim?from=${startPos.join(",")}&to=${endPos.join(",")}`)
+  bulletinClaimButton.style.display = "flex";
 }
-
-const bulletinPreview = document.getElementById("bulletin-preview")
-function showBulletinContentInput([x_, y_], [x, y]) {
-  console.log("setting bulletin content input position")
-  bulletinPreview.style.left = (x_ < x ? x_ : x) + "px"
-  bulletinPreview.style.top = (y_ < y ? y_ : y) + "px"
-  bulletinPreview.style.width = Math.abs(x - x_) + "px"
-  bulletinPreview.style.height = Math.abs(y - y_) + "px"
-  bulletinPreview.hidden = false
-
-}
-
 
 const contentInput = document.getElementById("content-input")
 contentInput?.addEventListener("input", (e) => {
   bulletinPreview.innerHTML = e.target.value
 })
 
-
-// @@@@@@@@@
-// CLAIM FORM
-//
-
-
 export {
   handleDoubleClick
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

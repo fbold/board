@@ -46,6 +46,8 @@ body {
   --grass: #ecd3b2;
   --text: #382418;
   --accent: #624632;
+
+  --good: #5bb85d;
 }
 
 
@@ -102,7 +104,8 @@ body {
   /*background-image:
     linear-gradient(to right, grey 2px, transparent 2px),
     linear-gradient(to bottom, grey 2px, transparent 2px);*/
-  background-image: radial-gradient(rgb(98, 70, 50, 0.3) 2px, transparent 2px);
+  /*background-image: radial-gradient(rgb(98, 70, 50, 0.1) 2px, transparent 2px);*/
+
 }
 
 #board {
@@ -122,7 +125,7 @@ body {
   /*background-image:
     linear-gradient(to right, grey 2px, transparent 2px),
     linear-gradient(to bottom, grey 2px, transparent 2px);*/
-  background-image: radial-gradient(var(--accent) 2px, transparent 2px);
+  background-image: radial-gradient(rgb(98, 70, 50, 0.0) 2px, transparent 2px);
   outline: var(--accent) 4px solid;
 }
 
@@ -338,6 +341,33 @@ body {
   pointer-events: none;
   position: absolute;
   border: 5px dashed var(--sec-bg);
+}
+
+#bulletin-outline>a {
+  position: relative;
+  top: 100%;
+  left: 100%;
+  pointer-events: all;
+  font-size: 1.5rem;
+  text-decoration: none;
+  background-color: var(--good);
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  color: white;
+  align-items: center;
+  justify-content: center;
+
+  display: none;
+}
+
+#bulletin-outline svg {
+  aspect-ratio: 1 / 1;
+  padding: 10px 10px;
+  width: 40px;
+  height: 40px;
 }
 
 .bulletin-preview {
