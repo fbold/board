@@ -2,7 +2,7 @@
  * FONTS
  * */
 @font-face {
-  font-family: "IBMPlexMono";
+  font-family: "IBM Plex Mono";
   src: url("/static/fonts/IBM_Plex_Mono/IBMPlexMono-SemiBold.ttf") format("truetype");
   font-display: swap;
 }
@@ -43,6 +43,7 @@ body {
   /*--grass: #357960;*/
   /*--grass: #1f7461;*/
   /*--grass: #01994A;*/
+  --bulletin-bg: #f7ecde;
   --grass: #ecd3b2;
   --text: #382418;
   --accent: #624632;
@@ -130,28 +131,126 @@ body {
 }
 
 .bulletin {
-  position: absolute;
-  background-color: var(--grass);
+  background-color: var(--bulletin-bg);
   color: black;
-  /*color: var(--text);*/
-  /*border: 2px dashed var(--sec-bg);*/
   text-align: center;
-  display: flex;
   font-size: 1rem;
   transform-origin: top left;
-  flex-direction: row;
-  flex-wrap: wrap;
   justify-content: center;
   align-content: center;
   padding: 4px;
-  z-index: 10;
   text-wrap: wrap;
   word-break: break-all;
   word-wrap: break-word;
   user-select: none;
   /* Safari */
   -webkit-user-select: none;
+  overflow: hidden;
+
+  font-family: "IBM Plex Mono";
 }
+
+.board-bulletin {
+  position: absolute;
+  z-index: 10;
+}
+
+/* @@@@@@@@@@@@@@@@
+ * CLAIMING
+ * */
+#bulletin-outline {
+  background-color: transparent;
+  pointer-events: none;
+  position: absolute;
+  border: 5px dashed var(--sec-bg);
+}
+
+#bulletin-outline>a {
+  position: relative;
+  top: 100%;
+  left: 100%;
+  pointer-events: all;
+  font-size: 1.5rem;
+  text-decoration: none;
+  background-color: var(--good);
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  color: white;
+  align-items: center;
+  justify-content: center;
+
+  display: none;
+}
+
+#bulletin-outline svg {
+  aspect-ratio: 1 / 1;
+  padding: 10px 10px;
+  width: 40px;
+  height: 40px;
+}
+
+.bulletin-preview {
+  position: absolute;
+  pointer-events: none;
+  background-color: var(--bulletin-bg);
+  opacity: 0.7;
+  border: 2px dashed var(--sec-bg);
+  padding: 4px;
+  z-index: 10;
+}
+
+
+
+/* @@@@@@@@@@@@@@@@
+ * CLAIM VIEW
+ * */
+
+#claim-page {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#claim-container {
+  width: 50%;
+  height: calc(100% - 200px);
+  margin: auto;
+}
+
+#claim-bulletin-card-slot {
+  position: relative;
+  width: 100%;
+  height: 50%;
+  margin: 20px 20px;
+}
+
+.bulletin#claim-bulletin-card {
+  position: absolute;
+  z-index: 10;
+
+  box-shadow: 4px 3px 221px 15px rgba(255, 255, 255, 0.31);
+  -webkit-box-shadow: 4px 3px 221px 15px rgba(255, 255, 255, 0.31);
+  -moz-box-shadow: 4px 3px 221px 15px rgba(255, 255, 255, 0.31);
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+#bulletin-claim-form {
+  color: white;
+  display: flex;
+  flex-flow: column;
+  gap: 4px;
+}
+
 
 /* @@@@@@@@@@@@@@@@
  * FLOWER PLANTING
@@ -330,150 +429,5 @@ body {
 
   100% {
     transform: translateX(0px) translateY(0px);
-  }
-}
-
-/* @@@@@@@@@@@@@@@@
- * CLAIMING
- * */
-#bulletin-outline {
-  background-color: transparent;
-  pointer-events: none;
-  position: absolute;
-  border: 5px dashed var(--sec-bg);
-}
-
-#bulletin-outline>a {
-  position: relative;
-  top: 100%;
-  left: 100%;
-  pointer-events: all;
-  font-size: 1.5rem;
-  text-decoration: none;
-  background-color: var(--good);
-  border-radius: 50%;
-  aspect-ratio: 1 / 1;
-  width: 50px;
-  height: 50px;
-  transform: translate(-50%, -50%);
-  color: white;
-  align-items: center;
-  justify-content: center;
-
-  display: none;
-}
-
-#bulletin-outline svg {
-  aspect-ratio: 1 / 1;
-  padding: 10px 10px;
-  width: 40px;
-  height: 40px;
-}
-
-.bulletin-preview {
-  position: absolute;
-  pointer-events: none;
-  background-color: var(--grass);
-  opacity: 0.7;
-  border: 2px dashed var(--sec-bg);
-  text-align: start;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: start;
-  padding: 4px;
-  z-index: 10;
-}
-
-
-
-/* @@@@@@@@@@@@@@@@
- * CLAIM VIEW
- * */
-
-#claim-page {
-  width: 100%;
-  height: 100%;
-  background-color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#claim-container {
-  width: 50%;
-  height: calc(100% - 200px);
-  margin: auto;
-}
-
-#claim-bulletin-card-slot {
-  position: relative;
-  width: 100%;
-  height: 50%;
-  margin: 20px 20px;
-}
-
-#claim-bulletin-card {
-  background-color: #E1C6B7;
-  color: black;
-  border: 2px dashed var(--sec-bg);
-  text-align: start;
-  display: flex;
-  font-size: 1rem;
-  transform-origin: top left;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-content: start;
-  padding: 4px;
-  z-index: 10;
-  box-shadow: 4px 3px 221px 15px rgba(255, 255, 255, 0.31);
-  -webkit-box-shadow: 4px 3px 221px 15px rgba(255, 255, 255, 0.31);
-  -moz-box-shadow: 4px 3px 221px 15px rgba(255, 255, 255, 0.31);
-
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-
-#bulletin-claim-form {
-  color: white;
-  display: flex;
-  flex-flow: column;
-  gap: 4px;
-}
-
-
-@keyframes card-rotate {
-
-  /* Center */
-  0% {
-    transform: rotate3d(0, 0, 0, 0deg);
-  }
-
-  /* Top Left */
-  20% {
-    transform: rotate3d(-1, 1, 0, 15deg);
-  }
-
-  /* Top Right */
-  40% {
-    transform: rotate3d(-1, -1, 0, 15deg);
-  }
-
-  /* Bottom Left */
-  60% {
-    transform: rotate3d(1, 1, 0, 15deg);
-  }
-
-  /* Bottom Right */
-  80% {
-    transform: rotate3d(1, -1, 0, 15deg);
-  }
-
-  /* Back to Center */
-  100% {
-    transform: rotate3d(0, 0, 0, 0deg);
   }
 }
