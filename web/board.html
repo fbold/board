@@ -16,15 +16,29 @@
           </svg>
         </a>
       </div>
+
       <div id="flower-preview">
         <div id="flower-preview-circle">
-          <img src="/static/images/flower-1.svg" />
+          <img id="flower-preview-image" src="/static/images/flower-1.svg" />
         </div>
-        <form id="flower-preview-form" hx-post="/flower" hx-swap="beforeend" hx-target="#flowers-layer">
+        <form id="flower-preview-form" hx-post="/flower" hx-include="[name='species']" hx-swap="beforeend"
+          hx-target="#flowers-layer">
           <label for="position">Position:</label>
-          <input name="position" type="text" readonly>
+          <input name="position" type="text" readonly />
+          <label>Flower Species</label>
+          <input hidden readonly value="1" name="species" id="flower-species-input" />
+          <div id="flower-species-selector">
+            <img data-value="1" src="/static/images/flower-1.svg" />
+            <img data-value="2" src="/static/images/flower-2.svg" />
+            <img data-value="3" src="/static/images/flower-3.svg" />
+            <img data-value="4" src="/static/images/flower-4.svg" />
+            <img data-value="5" src="/static/images/flower-5.svg" />
+            <img data-value="6" src="/static/images/flower-6.svg" />
+          </div>
+          <label for="scale">Size</label>
+          <input name="scale" id="scale" type="range" id="flower-size" min="1" max="10" />
           <label for="message">Flower Message:</label>
-          <input name="message" type="text" placeholder="optional message">
+          <input name="message" id="message" type="text" placeholder="optional message" />
           <div class="buttons">
             <button type="button" id="move-flower-button">Move</button>
             <button type="button" id="cancel-flower-button">Cancel</button>
@@ -32,6 +46,7 @@
           </div>
         </form>
       </div>
+
       <div id="floating-menu">
         <div id="floating-menu-ring"></div>
         <div id="floating-menu-buttons">

@@ -8,6 +8,31 @@ let flowerPos = [0, 0]
 const flowerPreview = document.getElementById("flower-preview")
 const flowerPreviewForm = document.getElementById("flower-preview-form")
 const flowerPreviewFormPosition = document.querySelector("#flower-preview-form > [name='position']")
+const flowerPreviewCircle = document.getElementById("flower-preview-circle")
+const flowerPreviewImage = document.getElementById("flower-preview-image")
+const flowerSize = document.getElementById("flower-size")
+
+const flowerSpeciesSelector = document.getElementById("flower-species-selector")
+const flowerSpeciesInput = document.getElementById("flower-species-input")
+
+const flowerSrc = (n) => `/static/images/flower-${n}.svg`
+
+if (flowerSpeciesSelector?.children && flowerSpeciesInput)
+  for (let i = 0; i < flowerSpeciesSelector.children.length; i++) {
+    let specie = flowerSpeciesSelector.children.item(i)
+    specie.onclick = (e) => {
+      const flowerValue = e.target.getAttribute("data-value")
+      flowerSpeciesInput.value = flowerValue
+      flowerPreviewImage.setAttribute("src", flowerSrc(flowerValue))
+      console.log(e.target.getAttribute("src"))
+    }
+  }
+
+flowerPreviewForm.onchange = (e) => {
+  if (e.target.name === "scale") {
+    flowerPreviewImage.style.scale = 0.5 + 0.5 * e.target.value / 10
+  }
+}
 
 function endPlanting() {
   flowerPreview.hidden = true
@@ -24,13 +49,13 @@ function hideForm() {
   flowerPreviewForm.style.opacity = 0
 }
 
-htmx.on("#flower-preview-form", "htmx:afterRequest", (e) => {
-  console.log(e)
-  if (e.detail.success) {
-    //successful
-  }
-  endPlanting()
-})
+//htmx.on("#flower-preview-form", "htmx:afterRequest", (e) => {
+//  console.log(e)
+//  if (e.detail.success) {
+//    //successful
+//  }
+//  endPlanting()
+//})
 
 const moveFlowerButton = document.getElementById("move-flower-button")
 moveFlowerButton.onclick = () => {
