@@ -30,7 +30,8 @@ if (flowerSpeciesSelector?.children && flowerSpeciesInput)
 
 flowerPreviewForm.onchange = (e) => {
   if (e.target.name === "scale") {
-    flowerPreviewImage.style.scale = 0.5 + 0.5 * e.target.value / 10
+    const scale = e.target.value //0.5 + 0.5 * e.target.value / 10
+    flowerPreviewImage.style.scale = scale
   }
 }
 

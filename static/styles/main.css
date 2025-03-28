@@ -43,7 +43,7 @@ body {
   /*--grass: #357960;*/
   /*--grass: #1f7461;*/
   /*--grass: #01994A;*/
-  --bulletin-bg: #f7ecde;
+  --bulletin-bg: #357960;
   --grass: #ecd3b2;
   --text: #382418;
   --accent: #624632;
@@ -91,6 +91,8 @@ body {
   height: 100vh;
   position: relative;
   overflow: hidden;
+  /*background-color: #357960;*/
+  background-color: var(--sec-bg);
 }
 
 #board-frame {
@@ -127,12 +129,13 @@ body {
     linear-gradient(to right, grey 2px, transparent 2px),
     linear-gradient(to bottom, grey 2px, transparent 2px);*/
   background-image: radial-gradient(rgb(98, 70, 50, 0.0) 2px, transparent 2px);
+  background-color: white;
   outline: var(--accent) 4px solid;
 }
 
 .bulletin {
   background-color: var(--bulletin-bg);
-  color: black;
+  color: white;
   text-align: center;
   font-size: 1rem;
   transform-origin: top left;
@@ -339,7 +342,7 @@ body {
 .flower {
   pointer-events: visibleFill;
   position: absolute;
-  transform-origin: center;
+  transform-origin: top left;
   transform: translate(-50%, -50%);
   width: 50px;
   height: 50px;
