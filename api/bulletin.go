@@ -78,6 +78,7 @@ func HandleBulletins(e *echo.Echo, p *pgxpool.Pool) {
 }
 
 func GetBulletinAtPosition(pool *pgxpool.Pool, x *int, y *int) (string, error) {
+	slog.Info("GetBulletinAtPosition")
 	query := `
 		SELECT id FROM bulletins WHERE 
 		xStart <= $1 AND

@@ -102,7 +102,8 @@ func GetFlowers(pool *pgxpool.Pool) ([]Flower, error) {
 
 func CreateFlower(pool *pgxpool.Pool, flower *Flower) error {
 	// need to find what bulletin it's on
-	bulletin, errB := GetBulletinAtPosition(pool, &flower.X, &flower.Y)
+	slog.Info("Create Flower", "X", flower.X, "Y", flower.Y)
+	bulletinId, errB := GetBulletinAtPosition(pool, &flower.X, &flower.Y)
 	if errB != nil {
 		slog.Error("error getting bulletin at flower position")
 	}
@@ -117,7 +118,7 @@ func CreateFlower(pool *pgxpool.Pool, flower *Flower) error {
 		"scale":      flower.Scale,
 		"species":    flower.Species,
 		"message":    flower.Message,
-		"bulletinId": bulletin.ID,
+		"bulletinId": bulletinId,
 	}
 
 	_, err := pool.Exec(context.Background(), query, args)
