@@ -1,3 +1,4 @@
 {{ block "flower" . }}
-<img src="/static/images/flower-1.svg" title="{{.Message}}" class="flower" style="left: {{.X}}px; top: {{.Y}}px;"></img>
+<img src="/static/images/flower-{{.Species}}.svg" title="{{.Message}}" class="flower"
+  style="left: {{.X}}px; top: {{.Y}}px;"></img>
 {{ end }}

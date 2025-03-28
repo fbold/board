@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"log/slog"
 	"net/http"
@@ -25,13 +26,24 @@ type Bulletin struct {
 	Content string
 }
 
+type Board struct {
+	Bulletins []Bulletin
+	Flowers   []Flower
+}
+
 func HandleBulletins(e *echo.Echo, p *pgxpool.Pool) {
 	e.GET("/bulletins", func(c echo.Context) error {
-		bulletins, err := GetBulletins(p)
+		bulletins, flowers, err := GetBulletinsWithFlowers(p)
 		if err != nil {
-
+			slog.Error("Failed in bulletins GET handler")
 		}
-		return c.Render(http.StatusOK, "board", bulletins)
+
+		board := Board{
+			Bulletins: bulletins,
+			Flowers:   flowers,
+		}
+
+		return c.Render(http.StatusOK, "board", board)
 	})
 
 	e.POST("/bulletin", func(c echo.Context) error {
@@ -126,6 +138,62 @@ func GetBulletins(pool *pgxpool.Pool) ([]Bulletin, error) {
 	}
 
 	return bulletins, nil
+}
+
+type BulletinWithFlowers struct {
+	Bulletin
+	Flowers []Flower
+}
+
+func GetBulletinsWithFlowers(pool *pgxpool.Pool) ([]Bulletin, []Flower, error) {
+	query := `
+	SELECT bulletins.id, bulletins.xStart, bulletins.yStart, bulletins.xEnd, bulletins.yEnd, bulletins.Width, bulletins.Height, bulletins.content,
+		COALESCE(json_agg(
+           json_build_object(
+               'id', flowers.id,
+               'x', flowers.x,
+               'y', flowers.y,
+               'scale', flowers.scale,
+               'species', flowers.species,
+               'message', flowers.message
+           )
+       ) FILTER (WHERE flowers.id IS NOT NULL), '[]') AS flowers
+	FROM bulletins LEFT JOIN flowers ON bulletins.id = flowers.bulletinid
+	GROUP BY bulletins.id`
+
+	rows, err := pool.Query(context.Background(), query)
+
+	if err != nil {
+		log.Println("Error Getting Bulletins")
+		return nil, nil, err
+	}
+
+	defer rows.Close()
+
+	var bulletins []Bulletin
+	var allFlowers []Flower
+
+	for rows.Next() {
+		var b Bulletin
+		var flowersJSON []byte
+		var flowers []Flower
+		if err := rows.Scan(&b.ID, &b.X_, &b.Y_, &b.X, &b.Y, &b.Width, &b.Height, &b.Content, &flowersJSON); err != nil {
+			log.Println("Error scanning row:", err)
+			return nil, nil, err
+		}
+		if err := json.Unmarshal(flowersJSON, &flowers); err != nil {
+			log.Fatal(err)
+		}
+		bulletins = append(bulletins, b)
+		allFlowers = append(allFlowers, flowers...)
+	}
+
+	if err := rows.Err(); err != nil {
+		log.Println("Error iterating over rows:", err)
+		return nil, nil, err
+	}
+
+	return bulletins, allFlowers, nil
 }
 
 func CreateBulletin(pool *pgxpool.Pool, bulletin Bulletin) error {

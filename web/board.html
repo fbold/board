@@ -2,8 +2,12 @@
 <div id="board-wall" data-xpos="" data-ypos="">
   <div id="board-frame">
     <div id="board" class="board" style="">
-      {{ template "bulletins" . }}
-      <div id="flowers-layer"></div>
+      {{ template "bulletins" .Bulletins }}
+      <div id="flowers-layer">
+        {{ range .Flowers }}
+        {{ template "flower" . }}
+        {{ end }}
+      </div>
       <div id="bulletin-outline">
         <a id="bulletin-claim-button" hidden href="/claim">
           <svg fill="#ffffff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"

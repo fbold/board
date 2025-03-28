@@ -58,13 +58,18 @@ func main() {
 
 	// HANDLERS
 	e.GET("/", func(c echo.Context) error {
-		bulletins, err := api.GetBulletins(dbpool)
+		bulletins, flowers, err := api.GetBulletinsWithFlowers(dbpool)
 		if err != nil {
 			slog.Info("Failed to retrieve bulletins")
 			return c.NoContent(http.StatusInternalServerError)
 		}
 
-		return c.Render(200, "index-board", bulletins)
+		board := api.Board{
+			Bulletins: bulletins,
+			Flowers:   flowers,
+		}
+
+		return c.Render(200, "index-board", board)
 	})
 
 	api.HandleBulletins(e, dbpool)
