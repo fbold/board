@@ -61,7 +61,7 @@ func HandleFlowers(e *echo.Echo, p *pgxpool.Pool) {
 			Message: message,
 		}
 
-		errFlower := CreateFlower(p, flower)
+		errFlower := CreateFlower(p, &flower)
 		if errFlower != nil {
 			slog.Error("Failed to create flower")
 		}
@@ -100,17 +100,24 @@ func GetFlowers(pool *pgxpool.Pool) ([]Flower, error) {
 	return flowers, nil
 }
 
-func CreateFlower(pool *pgxpool.Pool, flower Flower) error {
+func CreateFlower(pool *pgxpool.Pool, flower *Flower) error {
+	// need to find what bulletin it's on
+	bulletin, errB := GetBulletinAtPosition(pool, &flower.X, &flower.Y)
+	if errB != nil {
+		slog.Error("error getting bulletin at flower position")
+	}
+
 	query := `
-        INSERT INTO flowers (id, x, y, scale, species, message) VALUES (@id, @x, @y, @scale, @species, @message)
+        INSERT INTO flowers (id, x, y, scale, species, message, bulletinId) VALUES (@id, @x, @y, @scale, @species, @message, @bulletinId)
     `
 	args := pgx.NamedArgs{
-		"id":      uuid.NewString(),
-		"x":       flower.X,
-		"y":       flower.Y,
-		"scale":   flower.Scale,
-		"species": flower.Species,
-		"message": flower.Message,
+		"id":         uuid.NewString(),
+		"x":          flower.X,
+		"y":          flower.Y,
+		"scale":      flower.Scale,
+		"species":    flower.Species,
+		"message":    flower.Message,
+		"bulletinId": bulletin.ID,
 	}
 
 	_, err := pool.Exec(context.Background(), query, args)

@@ -15,6 +15,7 @@ import (
 )
 
 type Bulletin struct {
+	ID      string
 	X_      int
 	Y_      int
 	X       int
@@ -74,6 +75,26 @@ func HandleBulletins(e *echo.Echo, p *pgxpool.Pool) {
 		return c.String(200, "redirect") //Render(200, "index-board", board)
 
 	})
+}
+
+func GetBulletinAtPosition(pool *pgxpool.Pool, x *int, y *int) (string, error) {
+	query := `
+		SELECT id FROM bulletins WHERE 
+		xStart <= $1 AND
+		xEnd > $1 AND
+		yStart <= $2 
+		AND yEnd > $2 
+	`
+
+	var bulletinId string
+	err := pool.QueryRow(context.Background(), query, x, y).Scan(&bulletinId)
+
+	if err != nil {
+		slog.Error("Error scanning row:")
+		return "", err
+	}
+
+	return bulletinId, nil
 }
 
 func GetBulletins(pool *pgxpool.Pool) ([]Bulletin, error) {
