@@ -19,5 +19,5 @@ CREATE TABLE IF NOT EXISTS flowers(
   species INTEGER NOT NULL,
   message TEXT NOT NULL,
   bulletinId TEXT NOT NULL,
-  CONSTRAINT fk_bullein_flower PRIMARY KEY (bulleinId) REFERENCES bulletins(id),
+  CONSTRAINT fk_bullein_flower FOREIGN KEY (bulletinId) REFERENCES bulletins(id)
 );

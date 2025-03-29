@@ -8,9 +8,7 @@ let flowerPos = [0, 0]
 const flowerPreview = document.getElementById("flower-preview")
 const flowerPreviewForm = document.getElementById("flower-preview-form")
 const flowerPreviewFormPosition = document.querySelector("#flower-preview-form > [name='position']")
-const flowerPreviewCircle = document.getElementById("flower-preview-circle")
 const flowerPreviewImage = document.getElementById("flower-preview-image")
-const flowerSize = document.getElementById("flower-size")
 
 const flowerSpeciesSelector = document.getElementById("flower-species-selector")
 const flowerSpeciesInput = document.getElementById("flower-species-input")
@@ -68,14 +66,19 @@ function handleDoubleClick(e) {
   const [x, y] = screenToBoardSpace(e.x, e.y)
   let startPos = [Math.round(x), Math.round(y)]
   flowerPreviewForm.style.opacity = 0
-  showFloatingMenu(startPos, [{ text: "Plant Flower", onclick: () => { planting = true; hideFloatingMenu() } }])
+  showFloatingMenu(startPos, [{
+    text: "Plant Flower",
+    onclick: () => { planting = true; hideFloatingMenu() }
+  }])
   flowerPreview.hidden = false
 }
 
 
 window.addEventListener("mousemove", (e) => {
   if (!planting) return
-  if (e.target.classList.contains("bulletin")) {
+  //if (e.target.classList.contains("bulletin")) {
+  console.log(e.target.id)
+  if (e.target.id === "bulletin-face") {
     flowerPreview.style.opacity = 1
   } else
     flowerPreview.style.opacity = 0.5
@@ -87,7 +90,8 @@ window.addEventListener("mousemove", (e) => {
 })
 
 window.addEventListener("click", (e) => {
-  if (e.target.classList.contains("bulletin") && planting) {
+  //if (e.target.classList.contains("bulletin") && planting) {
+  if (e.target.id === "bulletin-face" && planting) {
     planting = false
     flowerPreviewFormPosition.value = flowerPos.join(",")
     flowerPreviewForm.style.scale = 1 / currentBoardScale

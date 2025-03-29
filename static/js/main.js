@@ -24,7 +24,8 @@ window.addEventListener("dblclick", (e) => {
   if (e.target.id === "board")
     claim.handleDoubleClick(e)
 
-  if (e.target.classList.contains("bulletin"))
+  //if (e.target.classList.contains("bulletin"))
+  if (e.target.id === "bulletin-face")
     plant.handleDoubleClick(e)
 
 })

@@ -215,7 +215,7 @@ function setTranslateY(value, overrideScale) {
 
 // mouse panning
 document.addEventListener("mousedown", (event) => {
-  if (!board) return
+  if (!board || event.target.classList.contains("menu")) return
   let scaledX = 0
   if (window.claimMode) return
   isDragging = true;
