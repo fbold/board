@@ -109,7 +109,8 @@ func CreateFlower(pool *pgxpool.Pool, flower *Flower) error {
 	}
 
 	query := `
-        INSERT INTO flowers (id, x, y, scale, species, message, bulletinId) VALUES (@id, @x, @y, @scale, @species, @message, @bulletinId)
+        INSERT INTO flowers (id, x, y, scale, species, message, bulletinId)
+				VALUES (@id, @x, @y, @scale, @species, @message, @bulletinId)
     `
 	args := pgx.NamedArgs{
 		"id":         uuid.NewString(),
